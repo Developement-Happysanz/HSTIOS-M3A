@@ -1,0 +1,10 @@
+  platform :ios, '10.0'
+   use_frameworks!
+
+   target 'M3 Admin' do
+   
+   pod 'SideMenu'
+   pod 'YouTubePlayer'
+   pod 'Alamofire', '~> 4.7'
+
+   end

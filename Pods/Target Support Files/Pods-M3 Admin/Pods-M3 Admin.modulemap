@@ -1,0 +1,6 @@
+framework module Pods_M3_Admin {
+  umbrella header "Pods-M3 Admin-umbrella.h"
+
+  export *
+  module * { export * }
+}
