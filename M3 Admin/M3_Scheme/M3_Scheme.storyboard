@@ -1,0 +1,112 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="14460.31" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
+    <device id="retina5_9" orientation="portrait">
+        <adaptation id="fullscreen"/>
+    </device>
+    <dependencies>
+        <deployment identifier="iOS"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="14460.20"/>
+        <capability name="Safe area layout guides" minToolsVersion="9.0"/>
+        <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
+    </dependencies>
+    <scenes>
+        <!--Scheme-->
+        <scene sceneID="Isi-2h-PYZ">
+            <objects>
+                <viewController storyboardIdentifier="scheme" id="OXZ-fd-KbL" customClass="Scheme" customModule="M3_Admin" customModuleProvider="target" sceneMemberID="viewController">
+                    <view key="view" contentMode="scaleToFill" id="XYa-Gw-nnW">
+                        <rect key="frame" x="0.0" y="0.0" width="375" height="812"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <scrollView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="Esp-zx-9eq">
+                                <rect key="frame" x="0.0" y="0.0" width="375" height="812"/>
+                                <subviews>
+                                    <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="pIg-3G-CdV">
+                                        <rect key="frame" x="0.0" y="0.0" width="375" height="812"/>
+                                        <subviews>
+                                            <textView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" fixedFrame="YES" textAlignment="natural" translatesAutoresizingMaskIntoConstraints="NO" id="tr8-X2-z4b">
+                                                <rect key="frame" x="32" y="127" width="314" height="389"/>
+                                                <autoresizingMask key="autoresizingMask" flexibleMinX="YES" widthSizable="YES" flexibleMaxX="YES" flexibleMinY="YES" heightSizable="YES" flexibleMaxY="YES"/>
+                                                <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                                <string key="text">Lorem ipsum dolor sit er elit lamet, consectetaur cillium adipisicing pecu, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum. Nam liber te conscient to factor tum poen legum odioque civiuda.</string>
+                                                <fontDescription key="fontDescription" type="system" weight="medium" pointSize="18"/>
+                                                <textInputTraits key="textInputTraits" autocapitalizationType="sentences"/>
+                                            </textView>
+                                            <view contentMode="scaleToFill" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="g4c-5c-D3K" customClass="YouTubePlayerView" customModule="YouTubePlayer">
+                                                <rect key="frame" x="32" y="543" width="313" height="182"/>
+                                                <autoresizingMask key="autoresizingMask" flexibleMinX="YES" widthSizable="YES" flexibleMaxX="YES" flexibleMinY="YES" heightSizable="YES" flexibleMaxY="YES"/>
+                                                <color key="backgroundColor" white="0.66666666669999997" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                            </view>
+                                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="DDU GKY" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Iby-b6-gPJ">
+                                                <rect key="frame" x="59" y="84" width="257" height="26"/>
+                                                <autoresizingMask key="autoresizingMask" flexibleMinX="YES" widthSizable="YES" flexibleMaxX="YES" flexibleMinY="YES" heightSizable="YES" flexibleMaxY="YES"/>
+                                                <fontDescription key="fontDescription" type="system" weight="semibold" pointSize="20"/>
+                                                <color key="textColor" red="0.23529411759999999" green="0.18039215689999999" blue="0.49019607840000001" alpha="1" colorSpace="calibratedRGB"/>
+                                                <nil key="highlightedColor"/>
+                                            </label>
+                                        </subviews>
+                                        <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                        <constraints>
+                                            <constraint firstAttribute="width" constant="375" id="nIL-36-VX7"/>
+                                            <constraint firstAttribute="height" constant="812" id="wPP-DP-nUQ"/>
+                                        </constraints>
+                                    </view>
+                                </subviews>
+                                <constraints>
+                                    <constraint firstAttribute="trailing" secondItem="pIg-3G-CdV" secondAttribute="trailing" id="3Nk-JF-P1f"/>
+                                    <constraint firstItem="pIg-3G-CdV" firstAttribute="centerY" secondItem="Esp-zx-9eq" secondAttribute="centerY" id="7VY-9l-di2"/>
+                                    <constraint firstItem="pIg-3G-CdV" firstAttribute="centerX" secondItem="Esp-zx-9eq" secondAttribute="centerX" id="BCZ-4p-ZES"/>
+                                    <constraint firstAttribute="bottom" secondItem="pIg-3G-CdV" secondAttribute="bottom" id="ITy-Le-bwY"/>
+                                    <constraint firstItem="pIg-3G-CdV" firstAttribute="leading" secondItem="Esp-zx-9eq" secondAttribute="leading" id="KuU-nl-gsq"/>
+                                    <constraint firstItem="pIg-3G-CdV" firstAttribute="top" secondItem="Esp-zx-9eq" secondAttribute="top" id="yqT-do-0Ns"/>
+                                </constraints>
+                            </scrollView>
+                        </subviews>
+                        <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                        <constraints>
+                            <constraint firstItem="Esp-zx-9eq" firstAttribute="leading" secondItem="IR3-fl-A11" secondAttribute="leading" id="4th-Tb-cYJ"/>
+                            <constraint firstItem="Esp-zx-9eq" firstAttribute="trailing" secondItem="IR3-fl-A11" secondAttribute="trailing" id="eUt-bI-lH1"/>
+                            <constraint firstAttribute="bottom" secondItem="Esp-zx-9eq" secondAttribute="bottom" id="mjS-sj-DfL"/>
+                            <constraint firstItem="Esp-zx-9eq" firstAttribute="top" secondItem="XYa-Gw-nnW" secondAttribute="top" id="q9u-Ej-1Qf"/>
+                        </constraints>
+                        <viewLayoutGuide key="safeArea" id="IR3-fl-A11"/>
+                    </view>
+                    <navigationItem key="navigationItem" title="Scheme" id="vZM-u5-AaR">
+                        <barButtonItem key="leftBarButtonItem" image="sidemenu_button.png" id="oQS-LT-nqv">
+                            <color key="tintColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                            <connections>
+                                <action selector="backBtn:" destination="OXZ-fd-KbL" id="t0f-bc-xd4"/>
+                            </connections>
+                        </barButtonItem>
+                    </navigationItem>
+                    <connections>
+                        <outlet property="videoPlayer" destination="g4c-5c-D3K" id="jet-SV-yKO"/>
+                    </connections>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="Tg6-2f-tmW" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="2552.8000000000002" y="-384.23645320197045"/>
+        </scene>
+        <!--Side Menu Navigation Controller-->
+        <scene sceneID="Qgi-DB-5Eu">
+            <objects>
+                <navigationController storyboardIdentifier="LeftMenuNavigationController" navigationBarHidden="YES" id="ckP-6j-dFj" customClass="UISideMenuNavigationController" customModule="SideMenu" sceneMemberID="viewController">
+                    <navigationBar key="navigationBar" contentMode="scaleToFill" insetsLayoutMarginsFromSafeArea="NO" id="HLI-m9-8cQ">
+                        <autoresizingMask key="autoresizingMask"/>
+                    </navigationBar>
+                    <userDefinedRuntimeAttributes>
+                        <userDefinedRuntimeAttribute type="boolean" keyPath="leftSide" value="YES"/>
+                        <userDefinedRuntimeAttribute type="number" keyPath="menuWidth">
+                            <real key="value" value="240"/>
+                        </userDefinedRuntimeAttribute>
+                    </userDefinedRuntimeAttributes>
+                </navigationController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="Syl-yb-YWt" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="1660" y="-384"/>
+        </scene>
+    </scenes>
+    <resources>
+        <image name="sidemenu_button.png" width="24" height="24"/>
+    </resources>
+</document>
