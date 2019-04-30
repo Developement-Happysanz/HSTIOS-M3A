@@ -27,12 +27,28 @@ class Center: UIViewController,UITableViewDelegate,UITableViewDataSource
         super.viewDidLoad()
 
         // Do any additional setup after loading the view.
-        setupSideMenu()
         
-        navigationRightButton ()
+      
         
-        webRequest ()
-
+        if GlobalVariables.user_type_name == "TNSRLM"
+        {
+            navigationLeftButton ()
+            webRequestTnsrlm ()
+        }
+        else
+        {
+            navigationLeftButton ()
+            navigationRightButton ()
+            webRequest ()
+        }
+        
+        let str = UserDefaults.standard.string(forKey: "fromDashboard")
+        
+        if str != "YES"
+        {
+            setupSideMenu()
+        }
+        
     }
     fileprivate func setupSideMenu()
     {
@@ -45,6 +61,52 @@ class Center: UIViewController,UITableViewDelegate,UITableViewDataSource
         SideMenuManager.default.menuAddScreenEdgePanGesturesToPresent(toView: self.navigationController!.view)
         
     }
+    func navigationLeftButton ()
+    {
+        let str = UserDefaults.standard.string(forKey: "fromDashboard")
+
+        if GlobalVariables.user_type_name == "TNSRLM" || str == "YES"
+        {
+            let navigationLeftButton = UIButton(type: .custom)
+            navigationLeftButton.setImage(UIImage(named: "back-01"), for: .normal)
+            navigationLeftButton.frame = CGRect(x: 0, y: 0, width: 30, height: 30)
+            navigationLeftButton.addTarget(self, action: #selector(menuButtonclick), for: .touchUpInside)
+            let navigationButton = UIBarButtonItem(customView: navigationLeftButton)
+            self.navigationItem.setLeftBarButton(navigationButton, animated: true)
+        }
+        else
+        {
+            let navigationLeftButton = UIButton(type: .custom)
+            navigationLeftButton.setImage(UIImage(named: "sidemenu_button"), for: .normal)
+            navigationLeftButton.frame = CGRect(x: 0, y: 0, width: 30, height: 30)
+            navigationLeftButton.addTarget(self, action: #selector(menuButtonclick), for: .touchUpInside)
+            let navigationButton = UIBarButtonItem(customView: navigationLeftButton)
+            self.navigationItem.setLeftBarButton(navigationButton, animated: true)
+        }
+    }
+    
+    @objc func menuButtonclick()
+    {
+        if GlobalVariables.user_type_name == "TNSRLM"
+        {
+            self.performSegue(withIdentifier: "tnsrlm_piaList", sender: self)
+            
+        }
+        else
+        {
+            let str = UserDefaults.standard.string(forKey: "fromDashboard")
+            
+            if str == "YES"
+            {
+                self.performSegue(withIdentifier: "to_Dashboard", sender: self)
+            }
+            else
+            {
+                present(SideMenuManager.default.menuLeftNavigationController!, animated: true, completion: nil)
+            }
+        }
+    }
+    
     func navigationRightButton ()
     {
         let navigationRightButton = UIButton(type: .custom)
@@ -82,9 +144,18 @@ class Center: UIViewController,UITableViewDelegate,UITableViewDataSource
     {
         GlobalVariables.center_id = centerId[indexPath.row]
         
-        self.performSegue(withIdentifier: "centerDetail", sender: self)
+        if GlobalVariables.user_type_name == "TNSRLM"
+        {
+            self.performSegue(withIdentifier: "tnsrlm_Center", sender: self)
+        }
+        else
+        {
+            self.performSegue(withIdentifier: "centerDetail", sender: self)
 
+        }
+        
     }
+    
     func webRequest ()
     {
         let functionName = "apipia/center_list"
@@ -118,6 +189,56 @@ class Center: UIViewController,UITableViewDelegate,UITableViewDataSource
                         }
                         
                             self.tableView.reloadData()
+                    }
+                    else
+                    {
+                        let alertController = UIAlertController(title: "M3", message: msg, preferredStyle: .alert)
+                        let action1 = UIAlertAction(title: "Ok", style: .default) { (action:UIAlertAction) in
+                            print("You've pressed default");
+                        }
+                        alertController.addAction(action1)
+                        self.present(alertController, animated: true, completion: nil)
+                    }
+                    break
+                case .failure(let error):
+                    print(error)
+                }
+        }
+    }
+    
+    func webRequestTnsrlm ()
+    {
+        let functionName = "apimain/pia_center_list"
+        let baseUrl = Baseurl.baseUrl + functionName
+        let url = URL(string: baseUrl)!
+        let parameters: Parameters = ["pia_id": GlobalVariables.pia_id!]
+        Alamofire.request(url, method: .post, parameters: parameters,encoding: JSONEncoding.default, headers: nil).responseJSON
+            {
+                response in
+                switch response.result
+                {
+                case .success:
+                    print(response)
+                    let JSON = response.result.value as? [String: Any]
+                    let msg = JSON?["msg"] as? String
+                    let status = JSON?["status"] as? String
+                    if (status == "success")
+                    {
+                        var centerList = JSON?["centerList"] as? [Any]
+                        for i in 0..<(centerList?.count ?? 0)
+                        {
+                            var dict = centerList?[i] as? [AnyHashable : Any]
+                            let center_name = dict?["center_name"] as? String
+                            let center_address = dict?["center_address"] as? String
+                            let center_id = dict?["id"] as? String
+                            
+                            self.centerName.append(center_name ?? "")
+                            self.centerAddress.append(center_address ?? "")
+                            self.centerId.append(center_id ?? "")
+                            
+                        }
+                        
+                        self.tableView.reloadData()
                     }
                     else
                     {

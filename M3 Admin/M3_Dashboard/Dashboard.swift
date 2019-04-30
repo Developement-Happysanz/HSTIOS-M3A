@@ -11,7 +11,7 @@ import SideMenu
 
 class Dashboard: UIViewController
 {
-
+    
     @IBOutlet weak var viewOne: UIView!
     
     @IBOutlet weak var viewTwo: UIView!
@@ -34,6 +34,47 @@ class Dashboard: UIViewController
     
     @IBOutlet weak var bell_Image: UIBarButtonItem!
     
+    @IBAction func mobiliserButton(_ sender: Any)
+    {
+        if GlobalVariables.user_type_name == "TNSRLM"
+        {
+            UserDefaults.standard.set("NO", forKey: "Tnsrlmstaff")
+            self.performSegue(withIdentifier: "m3DashBoard_User", sender: self)
+        }
+        else
+        {
+            UserDefaults.standard.set("YES", forKey: "fromDashboard")
+            self.performSegue(withIdentifier: "m3DashBoard_User", sender: self)
+        }
+    }
+    @IBAction func prospectsButton(_ sender: Any)
+    {
+        if GlobalVariables.user_type_name == "TNSRLM"
+        {
+            self.performSegue(withIdentifier: "dashbaord_Prospects", sender: self)
+        }
+        else
+        {
+            UserDefaults.standard.set("YES", forKey: "fromDashboard")
+            self.performSegue(withIdentifier: "dashbaord_Prospects", sender: self)
+        }
+    }
+    @IBAction func centerInfoButton(_ sender: Any)
+    {
+        UserDefaults.standard.set("YES", forKey: "fromDashboard")
+        self.performSegue(withIdentifier: "dashboard_Center", sender: self)
+    }
+    @IBAction func tradeButton(_ sender: Any)
+    {
+        UserDefaults.standard.set("YES", forKey: "fromDashboard")
+        self.performSegue(withIdentifier: "dashboard_Trade", sender: self)
+    }
+    @IBAction func taskButton(_ sender: Any)
+    {
+        UserDefaults.standard.set("YES", forKey: "fromDashboard")
+        self.performSegue(withIdentifier: "dashboard_task", sender: self)
+    }
+    
     override func viewDidLoad() {
         super.viewDidLoad()
 
@@ -43,23 +84,68 @@ class Dashboard: UIViewController
 
         self.navigationController?.navigationBar.setValue(true, forKey: "hidesShadow")
         
-        roundedCorners ()
-        
-        setupSideMenu()
+        navigationLeftButton ()
         
         loadValues ()
         
+        if GlobalVariables.user_type_name == "TNSRLM"
+        {
+            roundedCorners ()
+
+            viewFive.isHidden = true
+            
+        }
+        else
+        {
+            setupSideMenu()
+            roundedCorners ()
+            viewFive.isHidden = false
+        }
+        
     }
+    
+    func navigationLeftButton ()
+    {
+        if GlobalVariables.user_type_name == "TNSRLM"
+        {
+            let navigationLeftButton = UIButton(type: .custom)
+            navigationLeftButton.setImage(UIImage(named: "back-01"), for: .normal)
+            navigationLeftButton.frame = CGRect(x: 0, y: 0, width: 30, height: 30)
+            navigationLeftButton.addTarget(self, action: #selector(clickButton), for: .touchUpInside)
+            let navigationButton = UIBarButtonItem(customView: navigationLeftButton)
+            self.navigationItem.setLeftBarButton(navigationButton, animated: true)
+        }
+        else
+        {
+            let navigationLeftButton = UIButton(type: .custom)
+            navigationLeftButton.setImage(UIImage(named: "sidemenu_button"), for: .normal)
+            navigationLeftButton.frame = CGRect(x: 0, y: 0, width: 30, height: 30)
+            navigationLeftButton.addTarget(self, action: #selector(clickButton), for: .touchUpInside)
+            let navigationButton = UIBarButtonItem(customView: navigationLeftButton)
+            self.navigationItem.setLeftBarButton(navigationButton, animated: true)
+        }
+    }
+    @objc func clickButton()
+    {
+        if GlobalVariables.user_type_name == "TNSRLM"
+        {
+            self.performSegue(withIdentifier: "deshbaord_PIAList", sender: self)
+        }
+        else
+        {
+            present(SideMenuManager.default.menuLeftNavigationController!, animated: true, completion: nil)
+        }
+    }
+    
     func loadValues()
     {
-        mobiliserLabel.text = "Mobiliser" + " " + "-" +  " " + GlobalVariables.mobilizer_count!
-        
-        centerinfoLabel.text = "Center Information" + " " + "-" +  " " + GlobalVariables.center_count!
-        
-        studentsLabel.text = "Students" + " " + "-" +  " " + GlobalVariables.student_count!
-        
-        taskLabel.text = "Task" + " " + "-" +  " " + GlobalVariables.task_count!
-
+//        mobiliserLabel.text = "Mobiliser" + " " + "-" +  " " + GlobalVariables.mobilizer_count!
+//
+//        centerinfoLabel.text = "Center Information" + " " + "-" +  " " + GlobalVariables.center_count!
+//
+//        studentsLabel.text = "Students" + " " + "-" +  " " + GlobalVariables.student_count!
+//
+//        taskLabel.text = "Task" + " " + "-" +  " " + GlobalVariables.task_count!
 
     }
     fileprivate func setupSideMenu()

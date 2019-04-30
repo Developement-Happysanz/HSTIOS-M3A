@@ -30,7 +30,28 @@ class Login: UIViewController,UITextFieldDelegate
         LoginOutlet.layer.cornerRadius = 4
         
         eyeisClicked = true
+        
+        let tap: UITapGestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(dismissKeyboard))
+        
+        view.addGestureRecognizer(tap)
 
+    }
+    
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(true)
+        // Show the Navigation Bar
+        self.navigationController?.setNavigationBarHidden(true, animated: true)
+    }
+    
+    override func viewWillDisappear(_ animated: Bool) {
+        super.viewWillDisappear(true)
+        // Hide the Navigation Bar
+        self.navigationController?.setNavigationBarHidden(false, animated: false)
+    }
+    
+    @objc func dismissKeyboard() {
+        //Causes the view (or one of its embedded text fields) to resign the first responder status.
+        view.endEditing(true)
     }
     
     func textFieldShouldReturn(_ textField: UITextField) -> Bool
@@ -115,7 +136,7 @@ class Login: UIViewController,UITextFieldDelegate
             let functionName = "apimain/login/"
             let baseUrl = Baseurl.baseUrl + functionName
             let url = URL(string: baseUrl)!
-            let parameters: Parameters = ["user_name": name!, "password": password!, "mobile_type": "2", "device_id": GlobalVariables.deviceToken!]
+            let parameters: Parameters = ["user_name": name!, "password": password!, "mobile_type": "2", "device_id": "23423423423"]
             Alamofire.request(url, method: .post, parameters: parameters,encoding: JSONEncoding.default, headers: nil).responseJSON
                 {
                     response in
@@ -127,6 +148,7 @@ class Login: UIViewController,UITextFieldDelegate
                         let msg = JSON?["msg"] as? String
                         if (msg == "User loggedIn successfully")
                         {
+                            
                             // Mark : Parseing userData
                             let userData = JSON?["userData"] as? NSDictionary
                             GlobalVariables.user_id = (userData!["user_id"] as! String)
@@ -136,20 +158,33 @@ class Login: UIViewController,UITextFieldDelegate
                             GlobalVariables.user_type = (userData!["user_type"] as! String)
                             GlobalVariables.user_type_name = (userData!["user_type_name"] as! String)
                             
-                            // Mark : Parseing dashboardData
-                            let dashboardData = JSON?["dashboardData"] as? NSDictionary
-                            GlobalVariables.center_count =  String(format: "%@",dashboardData!["center_count"] as! CVarArg)
-                            GlobalVariables.mobilizer_count = String(format: "%@",dashboardData!["mobilizer_count"]  as! CVarArg)
-                            GlobalVariables.student_count = String(format: "%@",dashboardData!["student_count"]  as! CVarArg)
-                            GlobalVariables.task_count = String(format: "%@",dashboardData!["task_count"]  as! CVarArg)
-                            
-                            //Mark: Project Period
-                            var project_period = dashboardData!["project_period"] as? [AnyHashable : Any]
-                            GlobalVariables.period_from = project_period?["period_from"] as? String
-                            GlobalVariables.period_to = project_period?["period_from"] as? String
-
                             //Mark: navigation to Dashboard
-                            self.performSegue(withIdentifier:"dashboard", sender: self)
+                            if GlobalVariables.user_type_name == "TNSRLM"
+                            {
+                                // Mark : Parseing dashboardData tnsrlm
+                                let dashboardData = JSON?["dashboardData"] as? NSDictionary
+                                GlobalVariables.center_count =  String(format: "%@",dashboardData!["center_count"] as! CVarArg)
+                                GlobalVariables.mobilizer_count = String(format: "%@",dashboardData!["mobilizer_count"]  as! CVarArg)
+                                GlobalVariables.student_count = String(format: "%@",dashboardData!["student_count"]  as! CVarArg)
+                                
+                                self.performSegue(withIdentifier:"M3_TnsrlmDashboard", sender: self)
+                            }
+                            else
+                            {
+                                // Mark : Parseing dashboardData
+                                let dashboardData = JSON?["dashboardData"] as? NSDictionary
+                                GlobalVariables.center_count =  String(format: "%@",dashboardData!["center_count"] as! CVarArg)
+                                GlobalVariables.mobilizer_count = String(format: "%@",dashboardData!["mobilizer_count"]  as! CVarArg)
+                                GlobalVariables.student_count = String(format: "%@",dashboardData!["student_count"]  as! CVarArg)
+                                GlobalVariables.task_count = String(format: "%@",dashboardData!["task_count"]  as! CVarArg)
+                                
+                                //Mark: Project Period
+                                var project_period = dashboardData!["project_period"] as? [AnyHashable : Any]
+                                GlobalVariables.period_from = project_period?["period_from"] as? String
+                                GlobalVariables.period_to = project_period?["period_from"] as? String
+                                
+                                self.performSegue(withIdentifier:"dashboard", sender: self)
+                            }
                         }
                         else
                         {

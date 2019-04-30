@@ -7,6 +7,8 @@
 //
 
 import UIKit
+import Alamofire
+import MBProgressHUD
 
 class ForgotPassword: UIViewController,UITextFieldDelegate
 {
@@ -30,7 +32,64 @@ class ForgotPassword: UIViewController,UITextFieldDelegate
     
     @IBAction func submitAction(_ sender: Any)
     {
-        
+        let user_Name = userName.text
+        if (user_Name == "")
+        {
+            let alertController = UIAlertController(title: "M3", message: "username cannot be empty", preferredStyle: .alert)
+            let action1 = UIAlertAction(title: "Ok", style: .default) { (action:UIAlertAction) in
+                print("You've pressed default");
+            }
+            alertController.addAction(action1)
+            self.present(alertController, animated: true, completion: nil)
+        }
+        else
+        {
+            MBProgressHUD.showAdded(to: self.view, animated: true)
+            let functionName = "apimain/forgot_password/"
+            let baseUrl = Baseurl.baseUrl + functionName
+            let url = URL(string: baseUrl)!
+            let parameters: Parameters = ["user_name": user_Name!]
+            Alamofire.request(url, method: .post, parameters: parameters,encoding: JSONEncoding.default, headers: nil).responseJSON
+                {
+                    response in
+                    switch response.result
+                    {
+                    case .success:
+                        print(response)
+                        MBProgressHUD.hide(for: self.view, animated: true)
+                        let JSON = response.result.value as? [String: Any]
+                        let msg = JSON?["msg"] as? String
+                        if (msg == "Password Updated")
+                        {
+                            
+                            let alertController = UIAlertController(title: "M3", message: msg, preferredStyle: .alert)
+                            let action1 = UIAlertAction(title: "Ok", style: .default) { (action:UIAlertAction) in
+                                print("You've pressed default");
+                                self.userName.text = ""
+                                
+                                let storyboard = UIStoryboard(name: "M3_Login", bundle: nil)
+                                let login = storyboard.instantiateViewController(withIdentifier: "login") as! Login
+                                self.present(login, animated: true, completion: nil)
+                            }
+                            alertController.addAction(action1)
+                            self.present(alertController, animated: true, completion: nil)
+                           
+                        }
+                        else
+                        {
+                            let alertController = UIAlertController(title: "M3", message: msg, preferredStyle: .alert)
+                            let action1 = UIAlertAction(title: "Ok", style: .default) { (action:UIAlertAction) in
+                                print("You've pressed default");
+                            }
+                            alertController.addAction(action1)
+                            self.present(alertController, animated: true, completion: nil)
+                        }
+                        break
+                    case .failure(let error):
+                        print(error)
+                    }
+            }
+        }
     }
     
     @IBOutlet weak var scrollView: UIScrollView!
@@ -49,7 +108,16 @@ class ForgotPassword: UIViewController,UITextFieldDelegate
         userName.delegate = self
     
         submitOutlet.layer.cornerRadius = 4
+        
+        let tap: UITapGestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(dismissKeyboard))
+        
+        view.addGestureRecognizer(tap)
 
+    }
+    
+    @objc func dismissKeyboard() {
+        //Causes the view (or one of its embedded text fields) to resign the first responder status.
+        view.endEditing(true)
     }
     
     func textFieldShouldReturn(_ textField: UITextField) -> Bool

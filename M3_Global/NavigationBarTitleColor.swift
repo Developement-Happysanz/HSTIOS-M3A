@@ -12,3 +12,5 @@ class NavigationBarTitleColor: NSObject
 {
     static let navbar_TitleColor : () =  UINavigationBar.appearance().titleTextAttributes = [NSAttributedString.Key(rawValue: NSAttributedString.Key.foregroundColor.rawValue): UIColor.white]
 }
+
+

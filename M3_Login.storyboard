@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="14460.31" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="BYZ-38-t0r">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="14490.70" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="BYZ-38-t0r">
     <device id="retina5_9" orientation="portrait">
         <adaptation id="fullscreen"/>
     </device>
     <dependencies>
         <deployment identifier="iOS"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="14460.20"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="14490.49"/>
         <capability name="Safe area layout guides" minToolsVersion="9.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
@@ -84,7 +84,7 @@
                                                     <constraint firstAttribute="height" constant="1" id="qIl-kB-g6k"/>
                                                 </constraints>
                                             </view>
-                                            <textField opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" text="Qwerty01!" placeholder="Enter password" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="zQS-Ew-14y">
+                                            <textField opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" text="123456" placeholder="Enter password" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="zQS-Ew-14y">
                                                 <rect key="frame" x="28" y="471" width="284" height="35"/>
                                                 <constraints>
                                                     <constraint firstAttribute="width" constant="284" id="frK-os-ECM"/>
@@ -221,6 +221,7 @@
                         <outlet property="scrollView" destination="OSt-EX-HFB" id="Uea-XX-WrE"/>
                         <outlet property="userName" destination="8i8-ME-vM7" id="F18-OE-O69"/>
                         <segue destination="aD3-x3-rke" kind="show" identifier="dashboard" id="BUq-7C-Dhn"/>
+                        <segue destination="awE-c6-rIL" kind="show" identifier="M3_TnsrlmDashboard" id="wYg-m2-IPn"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="dkx-z0-nzr" sceneMemberID="firstResponder"/>
@@ -233,7 +234,15 @@
                 <viewControllerPlaceholder storyboardName="M3_Dashboard" referencedIdentifier="dashboard" id="aD3-x3-rke" sceneMemberID="viewController"/>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="DaJ-wv-pkM" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="51" y="449"/>
+            <point key="canvasLocation" x="-154" y="447"/>
+        </scene>
+        <!--tNSRLM_Dashboard-->
+        <scene sceneID="G5b-aa-NPD">
+            <objects>
+                <viewControllerPlaceholder storyboardName="TNSRLM" referencedIdentifier="tNSRLM_Dashboard" id="awE-c6-rIL" sceneMemberID="viewController"/>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="ZMp-lg-mXm" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="245" y="446"/>
         </scene>
         <!--Navigation Controller-->
         <scene sceneID="CLA-rb-4nT">
@@ -299,7 +308,7 @@
                                             </view>
                                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="agU-w1-kbc">
                                                 <rect key="frame" x="31" y="350" width="312" height="44"/>
-                                                <color key="backgroundColor" red="0.23529411759999999" green="0.18039215689999999" blue="0.49019607840000001" alpha="1" colorSpace="calibratedRGB"/>
+                                                <color key="backgroundColor" red="0.23433130950140843" green="0.17931931359014086" blue="0.49214920340000001" alpha="1" colorSpace="calibratedRGB"/>
                                                 <constraints>
                                                     <constraint firstAttribute="height" constant="44" id="Wx0-3x-fms"/>
                                                 </constraints>
@@ -369,12 +378,12 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="eaj-96-ub2" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="1596" y="18.472906403940886"/>
+            <point key="canvasLocation" x="1638" y="18"/>
         </scene>
     </scenes>
     <resources>
-        <image name="back-01.png" width="15" height="24"/>
-        <image name="forgot_password.png" width="133" height="133"/>
-        <image name="hide.png" width="83" height="83"/>
+        <image name="back-01.png" width="15.666666984558105" height="24"/>
+        <image name="forgot_password.png" width="133.33332824707031" height="133.33332824707031"/>
+        <image name="hide.png" width="83.333335876464844" height="83.333335876464844"/>
     </resources>
 </document>

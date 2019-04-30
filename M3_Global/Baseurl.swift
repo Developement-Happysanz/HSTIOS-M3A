@@ -11,4 +11,5 @@ import UIKit
 class Baseurl: NSObject
 {
     static let baseUrl = "http://happysanz.net/m3test/"
+    static let imageProfile = "assets/profile"
 }

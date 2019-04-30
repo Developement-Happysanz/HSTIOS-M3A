@@ -38,7 +38,7 @@
                                                 <color key="backgroundColor" white="0.66666666669999997" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                             </view>
                                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="DDU GKY" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Iby-b6-gPJ">
-                                                <rect key="frame" x="59" y="84" width="257" height="26"/>
+                                                <rect key="frame" x="50" y="84" width="285" height="26"/>
                                                 <autoresizingMask key="autoresizingMask" flexibleMinX="YES" widthSizable="YES" flexibleMaxX="YES" flexibleMinY="YES" heightSizable="YES" flexibleMaxY="YES"/>
                                                 <fontDescription key="fontDescription" type="system" weight="semibold" pointSize="20"/>
                                                 <color key="textColor" red="0.23529411759999999" green="0.18039215689999999" blue="0.49019607840000001" alpha="1" colorSpace="calibratedRGB"/>
@@ -80,6 +80,8 @@
                         </barButtonItem>
                     </navigationItem>
                     <connections>
+                        <outlet property="schemeTextview" destination="tr8-X2-z4b" id="dTm-7z-P2i"/>
+                        <outlet property="schemeTitle" destination="Iby-b6-gPJ" id="s6j-lg-fPG"/>
                         <outlet property="videoPlayer" destination="g4c-5c-D3K" id="jet-SV-yKO"/>
                     </connections>
                 </viewController>

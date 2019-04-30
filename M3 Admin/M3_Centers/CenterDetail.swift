@@ -14,10 +14,13 @@ import Alamofire
 class CenterDetail: UIViewController,YouTubePlayerDelegate,UITextViewDelegate
 {
     var centerPhoto = [String]()
+    
     var galleryId = [String]()
     
     var videoId = [String]()
+    
     var videoTitle = [String]()
+    
     var videoUrl = [String]()
 
     @IBOutlet weak var imageviewOne: UIImageView!
@@ -38,23 +41,60 @@ class CenterDetail: UIViewController,YouTubePlayerDelegate,UITextViewDelegate
     
     @IBOutlet weak var centerDetail: UITextView!
     
+    @IBAction func galleryButton(_ sender: Any)
+    {
+        self.performSegue(withIdentifier: "centerDetail_Gallery", sender: self)
+    }
+    @IBAction func videoButton(_ sender: Any)
+    {
+        self.performSegue(withIdentifier: "centerDetail_Video", sender: self)
+
+    }
     override func viewDidLoad()
     {
         super.viewDidLoad()
 
         // Do any additional setup after loading the view.
         
-        webRequest ()
+        self.title = "CenterDetail"
         
-        webRequest_Gallery ()
-        
-        webRequest_Video ()
+        if GlobalVariables.user_type_name == "TNSRLM"
+        {
+            
+        }
+        else
+        {
+            webRequest ()
+            
+            webRequest_Gallery ()
+            
+            webRequest_Video ()
+        }
         
         centerDetail.delegate = self
         
+        navigationLeftButton ()
+        
     }
+    
+    func navigationLeftButton ()
+    {
+        let navigationLeftButton = UIButton(type: .custom)
+        navigationLeftButton.setImage(UIImage(named: "back-01"), for: .normal)
+        navigationLeftButton.frame = CGRect(x: 0, y: 0, width: 30, height: 30)
+        navigationLeftButton.addTarget(self, action: #selector(backButtonclick), for: .touchUpInside)
+        let navigationButton = UIBarButtonItem(customView: navigationLeftButton)
+        self.navigationItem.setLeftBarButton(navigationButton, animated: true)
+    }
+    
+    @objc func backButtonclick()
+    {
+        self.performSegue(withIdentifier: "centerDetail_centerList", sender: self)
+    }
+    
     func webRequest ()
     {
+        
         let functionName = "apipia/center_details"
         let baseUrl = Baseurl.baseUrl + functionName
         let url = URL(string: baseUrl)!
@@ -104,6 +144,8 @@ class CenterDetail: UIViewController,YouTubePlayerDelegate,UITextViewDelegate
                 }
         }
     }
+    
+
     func webRequest_Gallery ()
     {
         let functionName = "apipia/center_gallery"
@@ -151,48 +193,35 @@ class CenterDetail: UIViewController,YouTubePlayerDelegate,UITextViewDelegate
     }
     func loadGallery ()
     {
-        let isIndexOne = videoUrl.indices.contains(0)
+        let isIndexOne = centerPhoto.indices.contains(0)
         if (isIndexOne == true)
         {
             let urlImageOne = centerPhoto[0]
-            let url = URL(string:urlImageOne)
-            if let data = try? Data(contentsOf: url!)
-            {
-                let image: UIImage = UIImage(data: data)!
-                self.imageviewOne.image = image
-            }
+            self.imageviewOne.sd_setImage(with: URL(string: urlImageOne), placeholderImage: UIImage(named: "placeholder.png"))
         }
         else
         {
             
         }
         
-        let isIndexTwo = videoUrl.indices.contains(1)
+        let isIndexTwo = centerPhoto.indices.contains(1)
         if (isIndexTwo == true)
         {
             let urlImageOne = centerPhoto[1]
-            let url = URL(string:urlImageOne)
-            if let data = try? Data(contentsOf: url!)
-            {
-                let image: UIImage = UIImage(data: data)!
-                self.imageviewTwo.image = image
-            }
+            self.imageviewTwo.sd_setImage(with: URL(string: urlImageOne), placeholderImage: UIImage(named: "placeholder.png"))
+
         }
         else
         {
             
         }
         
-        let isIndexThree = videoUrl.indices.contains(2)
+        let isIndexThree = centerPhoto.indices.contains(2)
         if (isIndexThree == true)
         {
             let urlImageOne = centerPhoto[2]
-            let url = URL(string:urlImageOne)
-            if let data = try? Data(contentsOf: url!)
-            {
-                let image: UIImage = UIImage(data: data)!
-                self.imageviewThree.image = image
-            }
+            self.imageviewThree.sd_setImage(with: URL(string: urlImageOne), placeholderImage: UIImage(named: "placeholder.png"))
+
         }
         else
         {
