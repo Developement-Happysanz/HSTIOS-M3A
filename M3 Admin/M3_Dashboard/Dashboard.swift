@@ -45,6 +45,7 @@ class Dashboard: UIViewController
         {
             UserDefaults.standard.set("YES", forKey: "fromDashboard")
             self.performSegue(withIdentifier: "m3DashBoard_User", sender: self)
+            print("sample")
         }
     }
     @IBAction func prospectsButton(_ sender: Any)
