@@ -14,37 +14,36 @@ import MBProgressHUD
 class CandidateForm: UIViewController,UIImagePickerControllerDelegate, UINavigationControllerDelegate, UITextFieldDelegate, UIPickerViewDelegate,UIPickerViewDataSource,CLLocationManagerDelegate
 {
         
-     var locationManager = CLLocationManager()
+    var locationManager = CLLocationManager()
     
-     var currentLocation: CLLocation!
+    var currentLocation: CLLocation!
     
-     var locationisUpdate = "YES"
+    var locationisUpdate = "YES"
     
-     var hour = ""
+    var hour = ""
     
-     var minutes = ""
+    var minutes = ""
     
-     var admission_date = ""
+    var admission_date = ""
 
-     var latitudeCurrentLocation: CLLocationDegrees = 0.0
+    var latitudeCurrentLocation: CLLocationDegrees = 0.0
     
-     var longitudeCurrentLocation: CLLocationDegrees = 0.0
+    var longitudeCurrentLocation: CLLocationDegrees = 0.0
     
-     var uploadedImage = UIImage()
+    var uploadedImage = UIImage()
 
-     var student_id = ""
+    var student_id = ""
 
-     var touchesBegan = "0"
+    var touchesBegan = "0"
     
     var bloodgroupArr : NSMutableArray = NSMutableArray()
     
     var bloodgroup_id : NSMutableArray = NSMutableArray()
 
-    
     var streetName = ""
     
-
     var _id = [String]()
+    
     var tradename = [String]()
     
     var trade_id = ""

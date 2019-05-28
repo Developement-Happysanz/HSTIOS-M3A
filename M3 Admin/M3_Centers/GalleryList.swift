@@ -41,8 +41,6 @@ class GalleryList: UIViewController,UITableViewDelegate,UITableViewDataSource
             webRequest ()
         }
         
-        
-
     }
     
     @IBOutlet weak var tableView: UITableView!

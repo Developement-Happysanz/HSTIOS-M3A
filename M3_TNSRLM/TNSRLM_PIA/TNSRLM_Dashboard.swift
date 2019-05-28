@@ -79,11 +79,11 @@ class TNSRLM_Dashboard: UIViewController {
     }
     func loadValues()
     {
-        mobiliserLabel.text = "Mobiliser" + " " + "-" +  " " + GlobalVariables.mobilizer_count!
-        
-        centerLabel.text = "Center Information" + " " + "-" +  " " + GlobalVariables.center_count!
-//
-        studentLabel.text = "Prospects" + " " + "-" +  " " + GlobalVariables.student_count!
+//        mobiliserLabel.text = "Mobiliser" + " " + "-" +  " " + GlobalVariables.mobilizer_count!
+//        
+//        centerLabel.text = "Center Information" + " " + "-" +  " " + GlobalVariables.center_count!
+////
+//        studentLabel.text = "Prospects" + " " + "-" +  " " + GlobalVariables.student_count!
 //
 //        taskLabel.text = "Task" + " " + "-" +  " " + GlobalVariables.task_count!
         

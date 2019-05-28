@@ -620,7 +620,7 @@ extension SideMenuManager {
         }
     }
     @available(*, deprecated, renamed: "default.menuBlurEffectStyle", message: "SideMenuManager class methods deprecated.")
-    public static var menuBlurEffectStyle: UIBlurEffect.Style? {
+    open static var menuBlurEffectStyle: UIBlurEffect.Style? {
         get {
             return `default`.menuBlurEffectStyle
         }

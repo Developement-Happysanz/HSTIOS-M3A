@@ -162,26 +162,26 @@ class Login: UIViewController,UITextFieldDelegate
                             if GlobalVariables.user_type_name == "TNSRLM"
                             {
                                 // Mark : Parseing dashboardData tnsrlm
-                                let dashboardData = JSON?["dashboardData"] as? NSDictionary
-                                GlobalVariables.center_count =  String(format: "%@",dashboardData!["center_count"] as! CVarArg)
-                                GlobalVariables.mobilizer_count = String(format: "%@",dashboardData!["mobilizer_count"]  as! CVarArg)
-                                GlobalVariables.student_count = String(format: "%@",dashboardData!["student_count"]  as! CVarArg)
-                                
+                                ///let dashboardData = JSON?["dashboardData"] as? NSDictionary
+//                                GlobalVariables.center_count =  String(format: "%@",dashboardData!["center_count"] as! CVarArg)
+//                                GlobalVariables.mobilizer_count = String(format: "%@",dashboardData!["mobilizer_count"]  as! CVarArg)
+//                                GlobalVariables.student_count = String(format: "%@",dashboardData!["student_count"]  as! CVarArg)
+//
                                 self.performSegue(withIdentifier:"M3_TnsrlmDashboard", sender: self)
                             }
                             else
                             {
                                 // Mark : Parseing dashboardData
-                                let dashboardData = JSON?["dashboardData"] as? NSDictionary
-                                GlobalVariables.center_count =  String(format: "%@",dashboardData!["center_count"] as! CVarArg)
-                                GlobalVariables.mobilizer_count = String(format: "%@",dashboardData!["mobilizer_count"]  as! CVarArg)
-                                GlobalVariables.student_count = String(format: "%@",dashboardData!["student_count"]  as! CVarArg)
-                                GlobalVariables.task_count = String(format: "%@",dashboardData!["task_count"]  as! CVarArg)
+                               //let dashboardData = JSON?["dashboardData"] as? NSDictionary
+//                                GlobalVariables.center_count =  String(format: "%@",dashboardData!["center_count"] as! CVarArg)
+//                                GlobalVariables.mobilizer_count = String(format: "%@",dashboardData!["mobilizer_count"]  as! CVarArg)
+//                                GlobalVariables.student_count = String(format: "%@",dashboardData!["student_count"]  as! CVarArg)
+//                                GlobalVariables.task_count = String(format: "%@",dashboardData!["task_count"]  as! CVarArg)
                                 
                                 //Mark: Project Period
-                                var project_period = dashboardData!["project_period"] as? [AnyHashable : Any]
-                                GlobalVariables.period_from = project_period?["period_from"] as? String
-                                GlobalVariables.period_to = project_period?["period_from"] as? String
+//                                var project_period = dashboardData!["project_period"] as? [AnyHashable : Any]
+//                                GlobalVariables.period_from = project_period?["period_from"] as? String
+//                                GlobalVariables.period_to = project_period?["period_from"] as? String
                                 
                                 self.performSegue(withIdentifier:"dashboard", sender: self)
                             }

@@ -19,17 +19,23 @@ class GlobalVariables: NSObject
     static var user_type: String?
     static var user_type_name: String?
 
-     /* Dashboard values */
-    static var center_count: String?
-    static var mobilizer_count: String?
-    static var student_count: String?
-    static var task_count: String?
     
-    /* Project Period */
-    static var period_from: String?
-    static var period_to: String?
+    /* staff Profile */
+    static var staff_address: String?
+    static var staff_age: String?
+    static var staff_community: String?
+    static var staff_community_class: String?
+    static var staff_email: String?
+    static var staff_name: String?
+    static var staff_nationality: String?
+    static var staff_phone: String?
+    static var staff_qualification: String?
+    static var staff_religion: String?
+    static var staff_role_type: String?
+    static var staff_sex: String?
+    static var staff_staff_id: String?
 
-    
+
     /* center */
     static var center_id: String?
     
@@ -101,5 +107,7 @@ class GlobalVariables: NSObject
     static var track_date: String?
     static var track_mob_id: String?
     static var track_name: String?
+    static var admissiondate: String?
+    static var user_created_at: String?
 
 }

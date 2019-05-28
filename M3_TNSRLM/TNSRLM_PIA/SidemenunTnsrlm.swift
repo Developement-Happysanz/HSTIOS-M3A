@@ -72,14 +72,14 @@ class SidemenunTnsrlm: UITableViewController {
             GlobalVariables.user_type_name = ""
             
             /* Dashboard values */
-            GlobalVariables.center_count = ""
-            GlobalVariables.mobilizer_count = ""
-            GlobalVariables.student_count = ""
-            GlobalVariables.task_count = ""
-            
-            /* Project Period */
-            GlobalVariables.period_from = ""
-            GlobalVariables.period_to = ""
+//            GlobalVariables.center_count = ""
+//            GlobalVariables.mobilizer_count = ""
+//            GlobalVariables.student_count = ""
+//            GlobalVariables.task_count = ""
+//            
+//            /* Project Period */
+//            GlobalVariables.period_from = ""
+//            GlobalVariables.period_to = ""
             
             
             /* center */

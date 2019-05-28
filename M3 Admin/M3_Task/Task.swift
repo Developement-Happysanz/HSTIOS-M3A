@@ -12,16 +12,13 @@ import Alamofire
 
 class Task: UIViewController,UITableViewDelegate,UITableViewDataSource
 {
-    var task_title : NSMutableArray = NSMutableArray()
-
-    var task_date : NSMutableArray = NSMutableArray()
+    var task_title = [String]()
     
-    var task_description : NSMutableArray = NSMutableArray()
+    var task_description  = [String]()
     
-    var task_id : NSMutableArray = NSMutableArray()
-
-    var assigned_to : NSMutableArray = NSMutableArray()
+    var task_id = [String]()
     
+    var task_date = [String]()
 
     @IBOutlet var tableView: UITableView!
     
@@ -49,6 +46,11 @@ class Task: UIViewController,UITableViewDelegate,UITableViewDataSource
         tableView.estimatedRowHeight = 68.0
         tableView.rowHeight = UITableView.automaticDimension
 
+    }
+    
+    override func viewWillAppear(_ animated: Bool)
+    {
+        webRequest ()
     }
     
     fileprivate func setupSideMenu()
@@ -123,7 +125,7 @@ class Task: UIViewController,UITableViewDelegate,UITableViewDataSource
     
     func webRequest ()
     {
-        let functionName = "apipia/list_task"
+        let functionName = "apimobilizer/list_task/"
         let baseUrl = Baseurl.baseUrl + functionName
         let url = URL(string: baseUrl)!
         let parameters: Parameters = ["user_id": GlobalVariables.user_id!]
@@ -140,26 +142,20 @@ class Task: UIViewController,UITableViewDelegate,UITableViewDataSource
                     if (status == "success")
                     {
                         var taskDetails = JSON?["taskDetails"] as? [Any]
-                        self.task_description.removeAllObjects()
-                        self.task_date.removeAllObjects()
-                        self.task_description.removeAllObjects()
-                        self.task_id.removeAllObjects()
-                        self.assigned_to.removeAllObjects()
                         
                         for i in 0..<(taskDetails?.count ?? 0)
                         {
                             var dict = taskDetails?[i] as? [AnyHashable : Any]
                             let tasktitle = dict?["task_title"] as? String
-                            let taskdate = dict?["task_date"] as? String
                             let taskdescription = dict?["task_description"] as? String
-                            let taskid = dict?["task_id"] as? String
-                            let assignedto = dict?["assigned_to"] as? String
+                            let taskdate = dict?["task_date"] as? String
+                            let taskid = String(format: "%@",dict?["id"] as! CVarArg)
 
-                            self.task_date.add(taskdate!)
-                            self.task_description.add(taskdescription!)
-                            self.task_title.add(tasktitle!)
-                            self.assigned_to.add(assignedto!)
-                            self.task_id.add(taskid!)
+                            self.task_description.append(taskdescription ?? "")
+                            self.task_title.append(tasktitle ?? "")
+                            self.task_id.append(taskid)
+                            self.task_date.append(taskdate ?? "")
+
 
                         }
                         
@@ -190,13 +186,11 @@ class Task: UIViewController,UITableViewDelegate,UITableViewDataSource
     {
         let cell = self.tableView.dequeueReusableCell(withIdentifier: "cell") as! TaskTableViewCell
         
-        cell.tasktitle.text = (task_title[indexPath.row] as! String)
+        cell.tasktitle.text = task_title[indexPath.row]
         
-        cell.dateLabel.text = (task_date[indexPath.row] as! String)
-
-        cell.taskDetails.text = (task_description[indexPath.row] as! String)
+        cell.taskDetails.text = task_description[indexPath.row]
         
-        cell.assignedLabel.text = "Assigned To : " + (assigned_to[indexPath.row] as! String)
+        cell.dateLabel.text = task_date[indexPath.row]
         
         cell.subView.layer.cornerRadius = 6
 
@@ -205,11 +199,9 @@ class Task: UIViewController,UITableViewDelegate,UITableViewDataSource
    
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath)
     {
-        GlobalVariables.task_id = (task_id[indexPath.row] as! String)
-        GlobalVariables.mobiliser_name = (assigned_to[indexPath.row] as! String)
+        GlobalVariables.task_id = (task_id[indexPath.row] )
         UserDefaults.standard.set("fromList", forKey: "Task_View") //setObject
-       // self.performSegue(withIdentifier: "addTask", sender: self)
-    }
+     }
     /*
     // MARK: - Navigation
 

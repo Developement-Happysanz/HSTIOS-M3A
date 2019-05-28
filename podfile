@@ -1,11 +1,11 @@
-  platform :ios, '10.0'
-   use_frameworks!
+platform :ios, '10.3'
+ use_frameworks!
+ 
+ target 'M3 Admin' do
 
-   target 'M3 Admin' do
-   
    pod 'SideMenu'
    pod 'YouTubePlayer'
    pod 'Alamofire', '~> 4.7'
    pod 'SDWebImage', '~> 4.0'
    pod 'MBProgressHUD', '~> 1.1.0'
-   end
+ end

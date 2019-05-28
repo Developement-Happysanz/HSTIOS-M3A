@@ -15,7 +15,7 @@ class QRScanner: UIViewController,AVCaptureMetadataOutputObjectsDelegate,XMLPars
     
     @IBAction func cancelButton(_ sender: Any)
     {
-        self.performSegue(withIdentifier: "back_list", sender: self)
+        self.performSegue(withIdentifier: "qrscanner_page", sender: self)
     }
     
     override func viewDidLoad()
@@ -23,7 +23,8 @@ class QRScanner: UIViewController,AVCaptureMetadataOutputObjectsDelegate,XMLPars
         super.viewDidLoad()
         
         // Get the back-facing camera for capturing videos
-        
+        self.title = "Scanner"
+
        
         view.backgroundColor = UIColor.black
         captureSession = AVCaptureSession()
@@ -97,7 +98,7 @@ class QRScanner: UIViewController,AVCaptureMetadataOutputObjectsDelegate,XMLPars
     
     @objc func clickButton()
     {
-        self.performSegue(withIdentifier: "back_list", sender: self)
+        self.performSegue(withIdentifier: "qrscanner_page", sender: self)
     }
     
     func failed() {
@@ -181,7 +182,7 @@ class QRScanner: UIViewController,AVCaptureMetadataOutputObjectsDelegate,XMLPars
          }
     
     override var prefersStatusBarHidden: Bool {
-        return true
+         return true
     }
     
     override var supportedInterfaceOrientations: UIInterfaceOrientationMask {

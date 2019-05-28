@@ -8,7 +8,7 @@
 
 import UIKit
 import Alamofire
-import MBProgressHUD
+import SideMenu
 
 class ForgotPassword: UIViewController,UITextFieldDelegate
 {
@@ -18,6 +18,11 @@ class ForgotPassword: UIViewController,UITextFieldDelegate
     var lastOffset: CGPoint!
     
     var keyboardHeight: CGFloat!
+    
+    var oldpswrdeyeisClicked = true
+
+    var newpswrdeyeisClicked = true
+
 
     @IBAction func backAction(_ sender: Any)
     {
@@ -26,16 +31,76 @@ class ForgotPassword: UIViewController,UITextFieldDelegate
         self.present(login, animated: true, completion: nil)
     }
     
-    @IBOutlet weak var userName: UITextField!
+    @IBOutlet var newPawrdOutlet: UIButton!
+    
+    @IBAction func newpaswrdButton(_ sender: Any)
+    {
+        if (newpswrdeyeisClicked == true)
+        {
+            let image = UIImage(named: "unhide.png") as UIImage?
+            newPawrdOutlet.setBackgroundImage(image, for: UIControl.State.normal)
+            newPassword.isSecureTextEntry = false
+            newpswrdeyeisClicked = false
+        }
+        else
+        {
+            let image = UIImage(named: "hide.png") as UIImage?
+            newPawrdOutlet.setBackgroundImage(image, for: UIControl.State.normal)
+            newPassword.isSecureTextEntry = true
+            newpswrdeyeisClicked = true
+        }
+    }
+    @IBOutlet var oldPaswrdEyeOulet: UIButton!
+    
+    @IBAction func oldPawwordEyeButton(_ sender: Any)
+    {
+        if (oldpswrdeyeisClicked == true)
+        {
+            let image = UIImage(named: "unhide.png") as UIImage?
+            oldPaswrdEyeOulet.setBackgroundImage(image, for: UIControl.State.normal)
+            oldPassword.isSecureTextEntry = false
+            oldpswrdeyeisClicked = false
+        }
+        else
+        {
+            let image = UIImage(named: "hide.png") as UIImage?
+            oldPaswrdEyeOulet.setBackgroundImage(image, for: UIControl.State.normal)
+            oldPassword.isSecureTextEntry = true
+            oldpswrdeyeisClicked = true
+        }
+    }
+    @IBOutlet var newPassword: UITextField!
+    
+    @IBOutlet var oldPassword: UITextField!
     
     @IBOutlet weak var submitOutlet: UIButton!
     
     @IBAction func submitAction(_ sender: Any)
     {
-        let user_Name = userName.text
-        if (user_Name == "")
+        let name = oldPassword.text
+        let password = newPassword.text
+        if (name!.isEmpty)
         {
-            let alertController = UIAlertController(title: "M3", message: "username cannot be empty", preferredStyle: .alert)
+            let alertController = UIAlertController(title: "M3", message: "Username is empty", preferredStyle: .alert)
+            let action1 = UIAlertAction(title: "Ok", style: .default) { (action:UIAlertAction) in
+                print("You've pressed default");
+            }
+            alertController.addAction(action1)
+            self.present(alertController, animated: true, completion: nil)
+            
+        }
+        else if(password!.isEmpty)
+        {
+            let alertController = UIAlertController(title: "M3", message: "Password is empty", preferredStyle: .alert)
+            let action1 = UIAlertAction(title: "Ok", style: .default) { (action:UIAlertAction) in
+                print("You've pressed default");
+            }
+            alertController.addAction(action1)
+            self.present(alertController, animated: true, completion: nil)
+        }
+        else if name == password
+        {
+            let alertController = UIAlertController(title: "M3", message: "Old and new password are same", preferredStyle: .alert)
             let action1 = UIAlertAction(title: "Ok", style: .default) { (action:UIAlertAction) in
                 print("You've pressed default");
             }
@@ -44,11 +109,10 @@ class ForgotPassword: UIViewController,UITextFieldDelegate
         }
         else
         {
-            MBProgressHUD.showAdded(to: self.view, animated: true)
-            let functionName = "apimain/forgot_password/"
+            let functionName = "apimain/change_password/"
             let baseUrl = Baseurl.baseUrl + functionName
             let url = URL(string: baseUrl)!
-            let parameters: Parameters = ["user_name": user_Name!]
+            let parameters: Parameters = ["user_id": GlobalVariables.user_id!,"old_password": name!,"new_password": password!]
             Alamofire.request(url, method: .post, parameters: parameters,encoding: JSONEncoding.default, headers: nil).responseJSON
                 {
                     response in
@@ -56,30 +120,27 @@ class ForgotPassword: UIViewController,UITextFieldDelegate
                     {
                     case .success:
                         print(response)
-                        MBProgressHUD.hide(for: self.view, animated: true)
                         let JSON = response.result.value as? [String: Any]
                         let msg = JSON?["msg"] as? String
                         if (msg == "Password Updated")
                         {
-                            
                             let alertController = UIAlertController(title: "M3", message: msg, preferredStyle: .alert)
                             let action1 = UIAlertAction(title: "Ok", style: .default) { (action:UIAlertAction) in
                                 print("You've pressed default");
-                                self.userName.text = ""
                                 
-                                let storyboard = UIStoryboard(name: "M3_Login", bundle: nil)
-                                let login = storyboard.instantiateViewController(withIdentifier: "login") as! Login
-                                self.present(login, animated: true, completion: nil)
+                               self.oldPassword.text = ""
+                               self.newPassword.text = ""
                             }
                             alertController.addAction(action1)
                             self.present(alertController, animated: true, completion: nil)
-                           
                         }
                         else
                         {
                             let alertController = UIAlertController(title: "M3", message: msg, preferredStyle: .alert)
                             let action1 = UIAlertAction(title: "Ok", style: .default) { (action:UIAlertAction) in
                                 print("You've pressed default");
+                                
+                                self.performSegue(withIdentifier: "dashboard", sender: self)
                             }
                             alertController.addAction(action1)
                             self.present(alertController, animated: true, completion: nil)
@@ -103,16 +164,61 @@ class ForgotPassword: UIViewController,UITextFieldDelegate
         super.viewDidLoad()
 
         // Do any additional setup after loading the view.
+        
+        self.title = "Change Password"
+
         NavigationBarTitleColor.navbar_TitleColor
         
-        userName.delegate = self
+        oldPassword.delegate = self
     
+        newPassword.delegate = self
+
         submitOutlet.layer.cornerRadius = 4
         
         let tap: UITapGestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(dismissKeyboard))
         
         view.addGestureRecognizer(tap)
+        
+        navigationLeftButton ()
 
+    }
+    
+    func navigationLeftButton ()
+    {
+        let str = UserDefaults.standard.string(forKey: "fromDashboard")
+        
+        if str == "YES"
+        {
+            let navigationLeftButton = UIButton(type: .custom)
+            navigationLeftButton.setImage(UIImage(named: "back-01"), for: .normal)
+            navigationLeftButton.frame = CGRect(x: 0, y: 0, width: 30, height: 30)
+            navigationLeftButton.addTarget(self, action: #selector(menuButtonclick), for: .touchUpInside)
+            let navigationButton = UIBarButtonItem(customView: navigationLeftButton)
+            self.navigationItem.setLeftBarButton(navigationButton, animated: true)
+        }
+        else
+        {
+            let navigationLeftButton = UIButton(type: .custom)
+            navigationLeftButton.setImage(UIImage(named: "sidemenu_button"), for: .normal)
+            navigationLeftButton.frame = CGRect(x: 0, y: 0, width: 30, height: 30)
+            navigationLeftButton.addTarget(self, action: #selector(menuButtonclick), for: .touchUpInside)
+            let navigationButton = UIBarButtonItem(customView: navigationLeftButton)
+            self.navigationItem.setLeftBarButton(navigationButton, animated: true)
+        }
+    }
+    
+    @objc func menuButtonclick()
+    {
+        let str = UserDefaults.standard.string(forKey: "fromDashboard")
+        
+        if str == "YES"
+        {
+            self.performSegue(withIdentifier: "to_Dashboard", sender: self)
+        }
+        else
+        {
+            present(SideMenuManager.default.menuLeftNavigationController!, animated: true, completion: nil)
+        }
     }
     
     @objc func dismissKeyboard() {
@@ -134,9 +240,16 @@ class ForgotPassword: UIViewController,UITextFieldDelegate
     
     func textFieldDidEndEditing(_ textField: UITextField)
     {
-        self.scrollView.setContentOffset(CGPoint.init(x: 0, y: 0), animated: true)
-        
-        self.view.endEditing(true);
+        if textField == oldPassword
+        {
+            newPassword.becomeFirstResponder()
+        }
+        else
+        {
+            newPassword.resignFirstResponder()
+            self.scrollView.setContentOffset(CGPoint.init(x: 0, y: 0), animated: true)
+            self.view.endEditing(true);
+        }
     }
     
 }

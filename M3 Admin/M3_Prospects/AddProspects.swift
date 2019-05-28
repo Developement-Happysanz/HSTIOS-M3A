@@ -37,9 +37,11 @@ class AddProspects: UIViewController {
     
     @IBAction func backButton(_ sender: Any)
     {
-        self.dismiss(animated: true, completion: nil)
+        self.performSegue(withIdentifier: "to_Dashboard", sender: self)
     }
-    override func viewDidLoad() {
+    
+    override func viewDidLoad()
+    {
         super.viewDidLoad()
 
         // Do any additional setup after loading the view.
@@ -50,7 +52,7 @@ class AddProspects: UIViewController {
         
         self.title = "Add Candidate"
         
-      //  navigationLetfButton ()
+        // navigationLetfButton ()
 
     }
     

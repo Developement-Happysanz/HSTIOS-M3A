@@ -1,32 +1,47 @@
 //
-//  VideoList.swift
+//  Time.swift
 //  M3 Admin
 //
-//  Created by Happy Sanz Tech on 05/02/19.
+//  Created by Happy Sanz Tech on 08/01/19.
 //  Copyright © 2019 Happy Sanz Tech. All rights reserved.
 //
 
 import UIKit
-import YouTubePlayer
+import SideMenu
 import Alamofire
 
-class VideoList: UIViewController,YouTubePlayerDelegate,UITableViewDataSource,UITableViewDelegate
-{
+class Time: UIViewController,UITableViewDelegate,UITableViewDataSource {
    
-    var videoTitle = [String]()
-    var videoUrl = [String]()
-
     @IBOutlet weak var tableView: UITableView!
+    
+    @IBAction func timeButton(_ sender: Any)
+    {
+        present(SideMenuManager.default.menuLeftNavigationController!, animated: true, completion: nil)
+    }
     override func viewDidLoad() {
         super.viewDidLoad()
 
         // Do any additional setup after loading the view.
-       // navigationRightButton ()
+        setupSideMenu()
         
-        self.title = "Video"
+        navigationRightButton ()
         
         webRequest ()
+
+
     }
+    fileprivate func setupSideMenu()
+    {
+        // Define the menus
+        SideMenuManager.default.menuLeftNavigationController = storyboard!.instantiateViewController(withIdentifier: "LeftMenuNavigationController") as? UISideMenuNavigationController
+        
+        // Enable gestures. The left and/or right menus must be set up above for these to work.
+        // Note that these continue to work on the Navigation Controller independent of the View Controller it displays!
+        SideMenuManager.default.menuAddPanGestureToPresent(toView: self.navigationController!.navigationBar)
+        SideMenuManager.default.menuAddScreenEdgePanGesturesToPresent(toView: self.navigationController!.view)
+        
+    }
+    
     func navigationRightButton ()
     {
         let navigationRightButton = UIButton(type: .custom)
@@ -36,17 +51,18 @@ class VideoList: UIViewController,YouTubePlayerDelegate,UITableViewDataSource,UI
         let navigationButton = UIBarButtonItem(customView: navigationRightButton)
         self.navigationItem.setRightBarButtonItems([navigationButton], animated: true)
     }
+    
     @objc func clickButton()
     {
-        self.performSegue(withIdentifier: "addvideo", sender: self)
-
+        self.performSegue(withIdentifier: "addTime", sender: self)
     }
+    
     func webRequest ()
     {
-        let functionName = "apimobilizer/view_centervideos/"
+        let functionName = "apipia/list_session"
         let baseUrl = Baseurl.baseUrl + functionName
         let url = URL(string: baseUrl)!
-        let parameters: Parameters = ["user_id": GlobalVariables.user_id!, "center_id": GlobalVariables.center_id!]
+        let parameters: Parameters = ["user_id": GlobalVariables.user_id!]
         Alamofire.request(url, method: .post, parameters: parameters,encoding: JSONEncoding.default, headers: nil).responseJSON
             {
                 response in
@@ -57,21 +73,21 @@ class VideoList: UIViewController,YouTubePlayerDelegate,UITableViewDataSource,UI
                     let JSON = response.result.value as? [String: Any]
                     let msg = JSON?["msg"] as? String
                     let status = JSON?["status"] as? String
-                    if (status == "Sucess")
+                    if (status == "success")
                     {
-                        var centerVideos = JSON?["Videos"] as? [Any]
-                        for i in 0..<(centerVideos?.count ?? 0)
-                        {
-                            var dict = centerVideos?[i] as? [AnyHashable : Any]
-                            let video_title = dict?["video_title"] as? String
-                            let video_url = dict?["video_url"] as? String
-
-                            self.videoTitle.append(video_title ?? "")
-                            self.videoUrl.append(video_url ?? "")
-
-                        }
+//                        var tradeList = JSON?["tradeList"] as? [Any]
+//                        for i in 0..<(tradeList?.count ?? 0)
+//                        {
+//                            //var dict = tradeList?[i] as? [AnyHashable : Any]
+////                            let trade_name = dict?["trade_name"] as? String
+////                            let Status = dict?["status"] as? String
+////
+////                            self.tradename.append(trade_name ?? "")
+////                            self.status.append(Status ?? "")
+//
+//                        }
                         
-                            self.tableView.reloadData()
+                           self.tableView.reloadData()
                     }
                     else
                     {
@@ -88,47 +104,16 @@ class VideoList: UIViewController,YouTubePlayerDelegate,UITableViewDataSource,UI
                 }
         }
     }
-    
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int
     {
-        return videoUrl.count
+        return 0
     }
-
+    
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell
     {
-        let cell = self.tableView.dequeueReusableCell(withIdentifier:"cell", for: indexPath)as! VideoTableViewCell
-
-        let VideoUrlOne = videoUrl[indexPath.row]
-        cell.playerView.delegate = self
-        cell.playerView.loadVideoID(VideoUrlOne)
-        cell.titleLabel.text = videoTitle[indexPath.row]
-
-        return cell
-
-    }
-
-    func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat
-    {
-        return 263
-    }
-//
-    func playerReady(_ videoPlayer: YouTubePlayerView)
-    {
+        let cell = self.tableView .dequeueReusableCell(withIdentifier: "cell") as! TimeTableViewCell
         
+        return cell
     }
     
-    func playerStateChanged(_ videoPlayer: YouTubePlayerView, playerState: YouTubePlayerState)
-    {
-        print("playerReady")
-    }
-    
-    /*
-    // MARK: - Navigation
-
-    // In a storyboard-based application, you will often want to do a little preparation before navigation
-    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        // Get the new view controller using segue.destination.
-        // Pass the selected object to the new view controller.
-    }
-    */
 }

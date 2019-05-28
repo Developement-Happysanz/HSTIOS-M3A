@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="14460.31" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="14490.70" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
     <device id="retina5_9" orientation="portrait">
         <adaptation id="fullscreen"/>
     </device>
     <dependencies>
         <deployment identifier="iOS"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="14460.20"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="14490.49"/>
         <capability name="Safe area layout guides" minToolsVersion="9.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
@@ -105,8 +105,8 @@
         <!--pIAList-->
         <scene sceneID="9zJ-CH-Q3n">
             <objects>
-                <placeholder placeholderIdentifier="IBFirstResponder" id="JEW-tp-TUD" userLabel="First Responder" sceneMemberID="firstResponder"/>
                 <viewControllerPlaceholder storyboardName="TNSRLM" referencedIdentifier="pIAList" id="ZzT-2Y-Oe7" sceneMemberID="viewController"/>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="JEW-tp-TUD" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
             <point key="canvasLocation" x="1319" y="-1414"/>
         </scene>
@@ -899,16 +899,17 @@
         <image name="click_upload.png" width="50" height="50"/>
         <image name="location.png" width="50" height="50"/>
         <image name="photo.png" width="50" height="50"/>
-        <image name="right arrow.png" width="49" height="49"/>
+        <image name="right arrow.png" width="49.5" height="49.5"/>
         <image name="sidemenu_button.png" width="24" height="24"/>
         <image name="upload_image.png" width="50" height="50"/>
         <image name="video.png" width="50" height="50"/>
     </resources>
     <inferredMetricsTieBreakers>
-        <segue reference="gbV-pf-Yzb"/>
+        <segue reference="rMQ-OF-bR7"/>
+        <segue reference="Flf-hV-gCo"/>
         <segue reference="2XI-ff-h3x"/>
         <segue reference="ZA7-wr-QkT"/>
-        <segue reference="B3J-7a-Sga"/>
+        <segue reference="B6s-0U-MPr"/>
         <segue reference="FnW-il-4uQ"/>
     </inferredMetricsTieBreakers>
 </document>
