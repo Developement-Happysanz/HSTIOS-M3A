@@ -107,13 +107,10 @@ class AddImage: UIViewController,UIImagePickerControllerDelegate, UINavigationCo
    
     func webRequest_Image ()
     {
-       
         let imgData = uploadedImage.jpegData(compressionQuality: 0.75)
         if imgData == nil
         {
-            
             self.performSegue(withIdentifier: "addImage_GalleryList", sender: self)
-
         }
         else
         {

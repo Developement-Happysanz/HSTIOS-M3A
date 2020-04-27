@@ -102,10 +102,10 @@ class Batch: UIViewController,UITableViewDataSource,UITableViewDelegate
                     let status = JSON?["status"] as? String
                     if (status == "success")
                     {
-                        var tradeList = JSON?["tradeList"] as? [Any]
+                        let tradeList = JSON?["tradeList"] as? [Any]
                         for i in 0..<(tradeList?.count ?? 0)
                         {
-                            var dict = tradeList?[i] as? [AnyHashable : Any]
+                            let dict = tradeList?[i] as? [AnyHashable : Any]
                             let trade_name = dict?["trade_name"] as? String
                             let Status = dict?["status"] as? String
                             

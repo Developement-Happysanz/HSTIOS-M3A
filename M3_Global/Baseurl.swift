@@ -10,6 +10,13 @@ import UIKit
 
 class Baseurl: NSObject
 {
-    static let baseUrl = "http://happysanz.net/m3test/"
-    static let imageProfile = "assets/profile"
+//    static let baseUrl = "https://www.mym3app.com/m3admin/"
+    static let imageProfile = "assets/students/"
+    /*Test Url*/
+    //static let baseUrl = "https://iyerandrao.com/m3admin/"
+    //static let baseUrl = "https://m3tnsrlm.happysanz.net/"
+    static let baseUrl = "https://happysanz.in/m3tnsrlm/"
+
 }
+
+ 

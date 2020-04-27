@@ -11,75 +11,45 @@ import Alamofire
 import MBProgressHUD
 
 class AddViewController: UIViewController,UITextFieldDelegate,UIPickerViewDelegate,UIPickerViewDataSource,UIImagePickerControllerDelegate, UINavigationControllerDelegate
-
-{    
+{
+      var picker = UIPickerView()
+      var datePicker = UIDatePicker()
+      var genderArr = [String]()
+      var roles = [String]()
+      var statusArr = [String]()
+      var imagePicker = UIImagePickerController()
+      var uploadedImage = UIImage()
+      var touchesBegan = "0"
+      var created_at = ""
+      var created_by = ""
+      var updated_at = ""
+      var updated_by = ""
+      var extra_curicullar_id = ""
+      var house_id = ""
+      var roleType = ""
+      var status = ""
+    
     @IBOutlet var dropdwnImg: UIImageView!
-    
-    var picker = UIPickerView()
-    
-    var datePicker = UIDatePicker()
-    
-    var genderArr = [String]()
-    
-    var roles = [String]()
-    
-    var statusArr = [String]()
-    
-    var imagePicker = UIImagePickerController()
-    
-    var uploadedImage = UIImage()
-
-    var touchesBegan = "0"
-
-    var created_at = ""
-
-    var created_by = ""
-    
-    var updated_at = ""
-    
-    var updated_by = ""
-    
-    var extra_curicullar_id = ""
-
-    var house_id = ""
-
-    var roleType = ""
-    
-    var status = ""
-    
     @IBOutlet var scrollView: UIScrollView!
-    
     @IBOutlet var userImageView: UIImageView!
-    
     @IBOutlet var role: UITextField!
-    
     @IBOutlet var name: UITextField!
-    
     @IBOutlet var gender: UITextField!
-    
-    @IBOutlet var dob: UITextField!
-    
+    @IBOutlet var dob: UITextField!    
     @IBOutlet var nationality: UITextField!
-    
     @IBOutlet var religion: UITextField!
-    
     @IBOutlet var community: UITextField!
-    
     @IBOutlet var caste: UITextField!
-    
     @IBOutlet var address: UITextField!
-    
     @IBOutlet var email: UITextField!
-    
     @IBOutlet var secemail: UITextField!
-    
     @IBOutlet var mobilenumber: UITextField!
-    
     @IBOutlet var secMobileNumber: UITextField!
-    
     @IBOutlet var qualification: UITextField!
-    
     @IBOutlet var saveOutlet: UIButton!
+    @IBOutlet weak var statusTxtfield: UITextField!
+    @IBOutlet weak var roleDropDwnImg: UIImageView!
+    
     
     @IBAction func saveButton(_ sender: Any)
     {
@@ -176,17 +146,31 @@ class AddViewController: UIViewController,UITextFieldDelegate,UIPickerViewDelega
         if _str == "YES"
         {
             self.title = "TNSRLM STAFF"
-            role.attributedPlaceholder = NSAttributedString(string: "Select Status",
-                                                            attributes: [NSAttributedString.Key.foregroundColor: UIColor.black])
-           
-            let myColor = UIColor.black
-            role.layer.cornerRadius = 4
-            role.layer.borderWidth = 1.0
-            role.layer.borderColor = myColor.cgColor
+//            role.attributedPlaceholder = NSAttributedString(string: "Select Role",
+//                                                            attributes: [NSAttributedString.Key.foregroundColor: UIColor.black])
+//
+//            let myColor = UIColor.black
+//            role.layer.cornerRadius = 4
+//            role.layer.borderWidth = 1.0
+//            role.layer.borderColor = myColor.cgColor
+//            //self.dropdwnImg.isHidden = true
+            
+            self.role.isHidden = true
+            self.roleDropDwnImg.isHidden = true
+           statusTxtfield.attributedPlaceholder = NSAttributedString(string: "Select Status",
+                                                                       attributes: [NSAttributedString.Key.foregroundColor: UIColor.black])
+                      
+           let myColorForStatus = UIColor.black
+           statusTxtfield.layer.cornerRadius = 4
+           statusTxtfield.layer.borderWidth = 1.0
+           statusTxtfield.layer.borderColor = myColorForStatus.cgColor
+
         }
         else
         {
             self.title = "ADD MOBILIZER"
+            self.role.isHidden = false
+            self.roleDropDwnImg.isHidden = false
             role.attributedPlaceholder = NSAttributedString(string: "Select Role",
                                                             attributes: [NSAttributedString.Key.foregroundColor: UIColor.black])
            
@@ -194,43 +178,39 @@ class AddViewController: UIViewController,UITextFieldDelegate,UIPickerViewDelega
             role.layer.cornerRadius = 4
             role.layer.borderWidth = 1.0
             role.layer.borderColor = myColor.cgColor
+            
+            statusTxtfield.attributedPlaceholder = NSAttributedString(string: "Select Status",
+                                                             attributes: [NSAttributedString.Key.foregroundColor: UIColor.black])
+            
+             let myColorForStatus = UIColor.black
+             statusTxtfield.layer.cornerRadius = 4
+             statusTxtfield.layer.borderWidth = 1.0
+             statusTxtfield.layer.borderColor = myColorForStatus.cgColor
+            
         }
         
         saveOutlet.layer.cornerRadius = 4
-        
         role.delegate = self
-        
         name.delegate = self
-        
         gender.delegate = self
-        
         dob.delegate = self
-        
         nationality.delegate = self
-        
         religion.delegate = self
-        
         community.delegate = self
-        
         caste.delegate = self
-        
         address.delegate = self
-        
         email.delegate = self
-        
         secemail.delegate = self
-        
         mobilenumber.delegate = self
-        
         secMobileNumber.delegate = self
-        
         qualification.delegate = self
-        
+        statusTxtfield.delegate = self
         genderArr = ["Male", "Female", "Others"]
-        
         roles = ["Trainer", "Mobiliser"]
-        
         statusArr = ["Active", "InActive"]
+        self.role.tag = 1
+        self.statusTxtfield.tag = 2
+        self.gender.tag = 3
         
         let str = UserDefaults.standard.string(forKey: "user_View")
         
@@ -255,11 +235,11 @@ class AddViewController: UIViewController,UITextFieldDelegate,UIPickerViewDelega
                             let _status = JSON?["status"] as? String
                             if (_status == "success")
                             {
-                                var userList = JSON?["userList"] as? [Any]
+                                let userList = JSON?["userList"] as? [Any]
                                 
                                 for i in 0..<(userList?.count ?? 0)
                                 {
-                                    var dict = userList?[i] as? [AnyHashable : Any]
+                                    let dict = userList?[i] as? [AnyHashable : Any]
                                     self.address.text = (dict!["address"] as! String)
                                     self.community.text = (dict!["community"] as! String)
                                     self.caste.text = (dict!["community_class"] as! String)
@@ -269,7 +249,7 @@ class AddViewController: UIViewController,UITextFieldDelegate,UIPickerViewDelega
                                     self.email.text = (dict!["email"] as! String)
                                     // GlobalVariables.blood_group = (dict!["extra_curicullar_id"] as! String)
                                     // GlobalVariables.city = (dict!["house_id"] as! String)
-                                    GlobalVariables.user_master_id = (dict!["id"] as! String)
+                                    //GlobalVariables.user_master_id = (dict!["id"] as! String)
                                     self.name.text = (dict!["name"] as! String)
                                     self.nationality.text = (dict!["nationality"] as! String)
                                     self.mobilenumber.text = (dict!["phone"] as! String)
@@ -281,7 +261,10 @@ class AddViewController: UIViewController,UITextFieldDelegate,UIPickerViewDelega
                                     self.secemail.text = (dict!["sec_email"] as! String)
                                     self.secMobileNumber.text = (dict!["sec_phone"] as! String)
                                     self.gender.text = (dict!["sex"] as! String)
-                                    self.role.text = (dict!["status"] as! String)
+                                   // self.role.text = (dict!["status"] as! String)
+                                    self.statusTxtfield.text = (dict!["status"] as! String)
+                                    //GlobalVariables.user_id = (dict!["pia_id"] as! String)
+
                                     // GlobalVariables.last_studied = (dict!["status"] as! String)
                                     
                                     if profImage != ""
@@ -297,14 +280,14 @@ class AddViewController: UIViewController,UITextFieldDelegate,UIPickerViewDelega
                                         }
                                     }
                                     
-//                                    if self.roleType == "4"
-//                                    {
-//                                        self.role.text = "Trainer"
-//                                    }
-//                                    else
-//                                    {
-//                                        self.role.text = "Mobiliser"
-//                                    }
+                                    if self.roleType == "4"
+                                    {
+                                        self.role.text = "Trainer"
+                                    }
+                                    else
+                                    {
+                                        self.role.text = "Mobiliser"
+                                    }
 //
 //                                    if self.gender.text == "Male"
 //                                    {
@@ -318,7 +301,6 @@ class AddViewController: UIViewController,UITextFieldDelegate,UIPickerViewDelega
 //                                    {
 //                                        self.gender.text = "Others"
 //                                    }
-                                    
                                 }
                             }
                             else
@@ -358,11 +340,11 @@ class AddViewController: UIViewController,UITextFieldDelegate,UIPickerViewDelega
                             let _status = JSON?["status"] as? String
                             if (_status == "success")
                             {
-                                var userList = JSON?["userList"] as? [Any]
+                                let userList = JSON?["userList"] as? [Any]
                                 
                                 for i in 0..<(userList?.count ?? 0)
                                 {
-                                    var dict = userList?[i] as? [AnyHashable : Any]
+                                    let dict = userList?[i] as? [AnyHashable : Any]
                                     self.address.text = (dict!["address"] as! String)
                                     self.community.text = (dict!["community"] as! String)
                                     self.caste.text = (dict!["community_class"] as! String)
@@ -384,7 +366,8 @@ class AddViewController: UIViewController,UITextFieldDelegate,UIPickerViewDelega
                                     self.secemail.text = (dict!["sec_email"] as! String)
                                     self.secMobileNumber.text = (dict!["sec_phone"] as! String)
                                     self.gender.text = (dict!["sex"] as! String)
-                                    self.role.text = (dict!["status"] as! String)
+                                    self.statusTxtfield.text = (dict!["status"] as! String)
+                                    //GlobalVariables.user_id = (dict!["pia_id"] as! String)
 
                                     // GlobalVariables.last_studied = (dict!["status"] as! String)
                                     
@@ -456,6 +439,11 @@ class AddViewController: UIViewController,UITextFieldDelegate,UIPickerViewDelega
         {
             name.becomeFirstResponder()
         }
+        else if textField == statusTxtfield
+        {
+            statusTxtfield.becomeFirstResponder()
+
+        }
         else if textField == name
         {
             gender.becomeFirstResponder()
@@ -515,9 +503,14 @@ class AddViewController: UIViewController,UITextFieldDelegate,UIPickerViewDelega
     {
         if textField == role
         {
-            role.tag = 1
-            gender.tag = 0
+//            role.tag = 1
+//            statusTxtfield.tag = 2
+//            gender.tag = 0
             self.pickerforGender(self.role)
+        }
+        else if textField == statusTxtfield
+        {
+            self.pickerforGender(self.statusTxtfield)
         }
         else if textField == name
         {
@@ -525,8 +518,9 @@ class AddViewController: UIViewController,UITextFieldDelegate,UIPickerViewDelega
         }
         else if textField == gender
         {
-            role.tag = 0
-            gender.tag = 2
+//            role.tag = 0
+//            gender.tag = 2
+//            statusTxtfield.tag = 2
             self.pickerforGender(self.dob)
         }
         else if textField == dob
@@ -576,81 +570,86 @@ class AddViewController: UIViewController,UITextFieldDelegate,UIPickerViewDelega
         
     }
     
-    func textFieldDidEndEditing(_ textField: UITextField)
-    {
-        
-        if touchesBegan == "0"
-        {
-        touchesBegan = "0"
-            
-        if textField == role
-        {
-            name.becomeFirstResponder()
-        }
-        else if textField == name
-        {
-            gender.tag = 2
-            gender.becomeFirstResponder()
-        }
-        else if textField == dob
-        {
-            nationality.becomeFirstResponder()
-        }
-        else if textField == nationality
-        {
-            religion.becomeFirstResponder()
-        }
-        else if textField == religion
-        {
-            community.becomeFirstResponder()
-        }
-        else if textField == community
-        {
-            caste.becomeFirstResponder()
-        }
-        else if textField == caste
-        {
-            address.becomeFirstResponder()
-        }
-        else if textField == address
-        {
-            email.becomeFirstResponder()
-        }
-        else if textField == email
-        {
-            secemail.becomeFirstResponder()
-        }
-        else if textField == secemail
-        {
-            mobilenumber.becomeFirstResponder()
-        }
-        else if textField == mobilenumber
-        {
-            secMobileNumber.becomeFirstResponder()
-        }
-        else if textField == secMobileNumber
-        {
-            qualification.becomeFirstResponder()
-        }
-        else if textField == qualification
-        {
-            qualification.resignFirstResponder()
-        }
-      }
-        else
-        {
-            textField.resignFirstResponder()
-            
-            touchesBegan = "1"
-        }
-    }
+//    func textFieldDidEndEditing(_ textField: UITextField)
+//    {
+//
+//        if touchesBegan == "0"
+//        {
+//           touchesBegan = "0"
+//
+//        if textField == role
+//        {
+//            statusTxtfield.becomeFirstResponder()
+//        }
+//        else if textField == statusTxtfield
+//        {
+//            name.becomeFirstResponder()
+//        }
+//        else if textField == name
+//        {
+//            //gender.tag = 2
+//            gender.becomeFirstResponder()
+//        }
+//        else if textField == dob
+//        {
+//            nationality.becomeFirstResponder()
+//        }
+//        else if textField == nationality
+//        {
+//            religion.becomeFirstResponder()
+//        }
+//        else if textField == religion
+//        {
+//            community.becomeFirstResponder()
+//        }
+//        else if textField == community
+//        {
+//            caste.becomeFirstResponder()
+//        }
+//        else if textField == caste
+//        {
+//            address.becomeFirstResponder()
+//        }
+//        else if textField == address
+//        {
+//            email.becomeFirstResponder()
+//        }
+//        else if textField == email
+//        {
+//            secemail.becomeFirstResponder()
+//        }
+//        else if textField == secemail
+//        {
+//            mobilenumber.becomeFirstResponder()
+//        }
+//        else if textField == mobilenumber
+//        {
+//            secMobileNumber.becomeFirstResponder()
+//        }
+//        else if textField == secMobileNumber
+//        {
+//            qualification.becomeFirstResponder()
+//        }
+//        else if textField == qualification
+//        {
+//            qualification.resignFirstResponder()
+//        }
+//      }
+//        else
+//        {
+//            textField.resignFirstResponder()
+//
+//            touchesBegan = "1"
+//        }
+//    }
     func pickerforGender(_ textField : UITextField)
     {
         
         picker = UIPickerView(frame: CGRect(x: 0, y: 0, width: self.view.frame.size.width, height: 216))
+        picker.setValue(UIColor.black, forKey: "textColor")
         picker.backgroundColor = .white
         
-        picker.showsSelectionIndicator = true
+       // picker.showsSelectionIndicator = true
         picker.delegate = self
         picker.dataSource = self
         
@@ -670,7 +669,47 @@ class AddViewController: UIViewController,UITextFieldDelegate,UIPickerViewDelega
         role.inputView = picker
         role.inputAccessoryView = toolBar
         
+        statusTxtfield.inputView = picker
+        statusTxtfield.inputAccessoryView = toolBar
+        
+        self.role.tag = 1
+        self.statusTxtfield.tag = 2
+        self.gender.tag = 3
+
     }
+    
+    func textField(_ textField: UITextField, shouldChangeCharactersIn range: NSRange, replacementString string: String) -> Bool
+      {
+       
+       if textField == mobilenumber
+       {
+           let currentCharacterCount = textField.text?.count ?? 0
+           if range.length + range.location > currentCharacterCount {
+               return false
+           }
+           let newLength = currentCharacterCount + string.count - range.length
+           return newLength <= 10
+       }
+       else if textField == secMobileNumber
+       {
+          let currentCharacterCount = textField.text?.count ?? 0
+          if range.length + range.location > currentCharacterCount {
+                      return false
+                  }
+          let newLength = currentCharacterCount + string.count - range.length
+          return newLength <= 10
+       }
+       else
+       {
+           let currentCharacterCount = textField.text?.count ?? 0
+           if range.length + range.location > currentCharacterCount {
+               return false
+           }
+           let newLength = currentCharacterCount + string.count - range.length
+           return newLength <= 30
+       }
+          
+      }
     
     func numberOfComponents(in pickerView: UIPickerView) -> Int
     {
@@ -679,39 +718,44 @@ class AddViewController: UIViewController,UITextFieldDelegate,UIPickerViewDelega
     
     func pickerView(_ pickerView: UIPickerView, numberOfRowsInComponent component: Int) -> Int
     {
-        if role.tag == 1
+        if role.isFirstResponder
         {
-            let _str = UserDefaults.standard.string(forKey: "Tnsrlmstaff")
-            if _str == "YES"
-            {
-                 return statusArr.count
-            }
-            else
-            {
-                return roles.count
-            }
-           
+            return roles.count
+        }
+        else if statusTxtfield.isFirstResponder
+        {
+          return statusArr.count
         }
         else
         {
             return genderArr.count
         }
+//            let _str = UserDefaults.standard.string(forKey: "Tnsrlmstaff")
+//            if _str == "YES"
+//            {
+//                 return statusArr.count
+//            }
+//            else
+//            {
+//                return roles.count
+//            }
+//
+//        }
+//        else
+//        {
+//            return genderArr.count
+//        }
     }
     
     func pickerView(_ pickerView: UIPickerView, titleForRow row: Int, forComponent component: Int) -> String?
     {
-        if role.tag == 1
+        if role.isFirstResponder
         {
-            let _str = UserDefaults.standard.string(forKey: "Tnsrlmstaff")
-            if _str == "YES"
-            {
-                 return statusArr[row]
-            }
-            else
-            {
-                return roles[row]
-            }
-          
+          return roles[row]
+        }
+        else if statusTxtfield.isFirstResponder
+        {
+            return statusArr[row]
         }
         else
         {
@@ -721,47 +765,78 @@ class AddViewController: UIViewController,UITextFieldDelegate,UIPickerViewDelega
     
     func pickerView(_ pickerView: UIPickerView, didSelectRow row: Int, inComponent component: Int)
     {
-        if role.tag == 1
+//        if role.tag == 1
+//        {
+//            let _str = UserDefaults.standard.string(forKey: "Tnsrlmstaff")
+//            if _str == "YES"
+//            {
+//                 self.role.text = statusArr[row]
+//            }
+//            else
+//            {
+//                self.role.text = roles[row]
+//            }
+//
+//        }
+//        else if statusTxtfield.tag == 2
+//        {
+//            self.statusTxtfield.text = statusArr[row]
+//        }
+//        else
+//        {
+//            self.gender.text = genderArr[row]
+//        }
+        
+        if role.isFirstResponder
         {
-            let _str = UserDefaults.standard.string(forKey: "Tnsrlmstaff")
-            if _str == "YES"
-            {
-                 self.role.text = statusArr[row]
-            }
-            else
-            {
-                self.role.text = roles[row]
-            }
-            
+          self.role.text = statusArr[row]
+        }
+        else if statusTxtfield.isFirstResponder
+        {
+           self.statusTxtfield.text = statusArr[row]
         }
         else
         {
-            self.gender.text = genderArr[row]
+           self.gender.text = genderArr[row]
         }
     }
     
     @objc func genderpickerdoneClick ()
     {
-        if role.tag == 1
+//        if role.tag == 1
+//        {
+//            let _str = UserDefaults.standard.string(forKey: "Tnsrlmstaff")
+//            if _str == "YES"
+//            {
+//                let selectedIndex = picker.selectedRow(inComponent: 0)
+//                role.text = roles[selectedIndex]
+//                role.resignFirstResponder()
+//                statusTxtfield.becomeFirstResponder()
+//            }
+//        }
+//        else
+//         {
+//            let selectedIndex = picker.selectedRow(inComponent: 0)
+//            gender.text = genderArr[selectedIndex]
+//            gender.resignFirstResponder()
+//            dob.becomeFirstResponder()
+//        }
+        
+        if role.isFirstResponder
         {
-            let _str = UserDefaults.standard.string(forKey: "Tnsrlmstaff")
-            if _str == "YES"
-            {
-                let selectedIndex = picker.selectedRow(inComponent: 0)
-                role.text = statusArr[selectedIndex]
-                role.resignFirstResponder()
-                name.becomeFirstResponder()
-            }
-            else
-            {
-                let selectedIndex = picker.selectedRow(inComponent: 0)
-                role.text = roles[selectedIndex]
-                role.resignFirstResponder()
-                name.becomeFirstResponder()
-            }
-            
+            let selectedIndex = picker.selectedRow(inComponent: 0)
+            role.text = roles[selectedIndex]
+            role.resignFirstResponder()
+            statusTxtfield.becomeFirstResponder()
         }
-        else if gender.tag == 2
+        else if statusTxtfield.isFirstResponder
+        {
+            let selectedIndex = picker.selectedRow(inComponent: 0)
+            statusTxtfield.text = statusArr[selectedIndex]
+            statusTxtfield.resignFirstResponder()
+            name.becomeFirstResponder()
+        }
+        else
         {
             let selectedIndex = picker.selectedRow(inComponent: 0)
             gender.text = genderArr[selectedIndex]
@@ -772,12 +847,17 @@ class AddViewController: UIViewController,UITextFieldDelegate,UIPickerViewDelega
     
     @objc func genderpickercancelClick ()
     {
-        if role.tag == 1
+        if role.isFirstResponder
         {
             role.resignFirstResponder()
+            statusTxtfield.becomeFirstResponder()
+        }
+        else if statusTxtfield.isFirstResponder
+        {
+            statusTxtfield.resignFirstResponder()
             name.becomeFirstResponder()
         }
-        else if gender.tag == 2
+        else
         {
             gender.resignFirstResponder()
             dob.becomeFirstResponder()
@@ -787,6 +867,7 @@ class AddViewController: UIViewController,UITextFieldDelegate,UIPickerViewDelega
     func pickStartDate(_ textField : UITextField)
     {
         self.datePicker = UIDatePicker(frame:CGRect(x: 0, y: 0, width: self.view.frame.size.width, height: 216))
+        self.datePicker.setValue(UIColor.black, forKey: "textColor")
         self.datePicker.backgroundColor = UIColor.white
         self.datePicker.datePickerMode = .date
         self.datePicker.maximumDate = Date()
@@ -841,6 +922,7 @@ class AddViewController: UIViewController,UITextFieldDelegate,UIPickerViewDelega
         let emailstr = self.email.text
         let mobilenumberstr = self.mobilenumber.text
         let qualificationstr = self.qualification.text
+        let status = self.statusTxtfield.text
 
         if str == "YES"
         {
@@ -864,7 +946,7 @@ class AddViewController: UIViewController,UITextFieldDelegate,UIPickerViewDelega
             }
             else if (genderstr!.isEmpty)
             {
-                let alertController = UIAlertController(title: "M3", message: "", preferredStyle: .alert)
+                let alertController = UIAlertController(title: "M3", message: "Enter V", preferredStyle: .alert)
                 let action1 = UIAlertAction(title: "Ok", style: .default) { (action:UIAlertAction) in
                     print("You've pressed default");
                 }
@@ -873,7 +955,7 @@ class AddViewController: UIViewController,UITextFieldDelegate,UIPickerViewDelega
             }
             else if (dobstr!.isEmpty)
             {
-                let alertController = UIAlertController(title: "M3", message: "", preferredStyle: .alert)
+                let alertController = UIAlertController(title: "M3", message: "Date of Birth cannot be empty", preferredStyle: .alert)
                 let action1 = UIAlertAction(title: "Ok", style: .default) { (action:UIAlertAction) in
                     print("You've pressed default");
                 }
@@ -882,7 +964,7 @@ class AddViewController: UIViewController,UITextFieldDelegate,UIPickerViewDelega
             }
             else if (nationalitystr!.isEmpty)
             {
-                let alertController = UIAlertController(title: "M3", message: "", preferredStyle: .alert)
+                let alertController = UIAlertController(title: "M3", message: "Nationality cannot empty", preferredStyle: .alert)
                 let action1 = UIAlertAction(title: "Ok", style: .default) { (action:UIAlertAction) in
                     print("You've pressed default");
                 }
@@ -891,7 +973,7 @@ class AddViewController: UIViewController,UITextFieldDelegate,UIPickerViewDelega
             }
             else if (religionstr!.isEmpty)
             {
-                let alertController = UIAlertController(title: "M3", message: "", preferredStyle: .alert)
+                let alertController = UIAlertController(title: "M3", message: "Religion cannot empty", preferredStyle: .alert)
                 let action1 = UIAlertAction(title: "Ok", style: .default) { (action:UIAlertAction) in
                     print("You've pressed default");
                 }
@@ -900,7 +982,7 @@ class AddViewController: UIViewController,UITextFieldDelegate,UIPickerViewDelega
             }
             else if (communitystr!.isEmpty)
             {
-                let alertController = UIAlertController(title: "M3", message: "", preferredStyle: .alert)
+                let alertController = UIAlertController(title: "M3", message: "Community cannot be empty", preferredStyle: .alert)
                 let action1 = UIAlertAction(title: "Ok", style: .default) { (action:UIAlertAction) in
                     print("You've pressed default");
                 }
@@ -909,7 +991,7 @@ class AddViewController: UIViewController,UITextFieldDelegate,UIPickerViewDelega
             }
             else if (castestr!.isEmpty)
             {
-                let alertController = UIAlertController(title: "M3", message: "", preferredStyle: .alert)
+                let alertController = UIAlertController(title: "M3", message: "Caste cannot be empty", preferredStyle: .alert)
                 let action1 = UIAlertAction(title: "Ok", style: .default) { (action:UIAlertAction) in
                     print("You've pressed default");
                 }
@@ -918,7 +1000,7 @@ class AddViewController: UIViewController,UITextFieldDelegate,UIPickerViewDelega
             }
             else if (addressstr!.isEmpty)
             {
-                let alertController = UIAlertController(title: "M3", message: "", preferredStyle: .alert)
+                let alertController = UIAlertController(title: "M3", message: "Address cannot be empty", preferredStyle: .alert)
                 let action1 = UIAlertAction(title: "Ok", style: .default) { (action:UIAlertAction) in
                     print("You've pressed default");
                 }
@@ -927,7 +1009,7 @@ class AddViewController: UIViewController,UITextFieldDelegate,UIPickerViewDelega
             }
             else if (emailstr!.isEmpty)
             {
-                let alertController = UIAlertController(title: "M3", message: "", preferredStyle: .alert)
+                let alertController = UIAlertController(title: "M3", message: "Email cannot be empty", preferredStyle: .alert)
                 let action1 = UIAlertAction(title: "Ok", style: .default) { (action:UIAlertAction) in
                     print("You've pressed default");
                 }
@@ -936,7 +1018,7 @@ class AddViewController: UIViewController,UITextFieldDelegate,UIPickerViewDelega
             }
             else if (mobilenumberstr!.isEmpty)
             {
-                let alertController = UIAlertController(title: "M3", message: "", preferredStyle: .alert)
+                let alertController = UIAlertController(title: "M3", message: "Mobile Number cannot be empty", preferredStyle: .alert)
                 let action1 = UIAlertAction(title: "Ok", style: .default) { (action:UIAlertAction) in
                     print("You've pressed default");
                 }
@@ -945,7 +1027,7 @@ class AddViewController: UIViewController,UITextFieldDelegate,UIPickerViewDelega
             }
             else if (qualificationstr!.isEmpty)
             {
-                let alertController = UIAlertController(title: "M3", message: "", preferredStyle: .alert)
+                let alertController = UIAlertController(title: "M3", message: "Qualification cannot be empty", preferredStyle: .alert)
                 let action1 = UIAlertAction(title: "Ok", style: .default) { (action:UIAlertAction) in
                     print("You've pressed default");
                 }
@@ -967,7 +1049,7 @@ class AddViewController: UIViewController,UITextFieldDelegate,UIPickerViewDelega
                 let functionName = "apimain/create_user"
                 let baseUrl = Baseurl.baseUrl + functionName
                 let url = URL(string: baseUrl)!
-                let parameters: Parameters = ["user_id": GlobalVariables.user_id!,"name": namestr!, "sex": genderstr!, "dob": dobstr!, "nationality": nationalitystr! , "religion": religionstr!, "community_class": communitystr!, "community": castestr!, "address": addressstr!, "email": emailstr!, "sec_email": self.secemail.text as Any, "phone": mobilenumberstr!, "sec_phone":self.secMobileNumber.text as Any, "qualification": qualificationstr!,"status":rolestr!]
+                let parameters: Parameters = ["user_id": GlobalVariables.user_id!,"name": namestr!, "sex": genderstr!, "dob": dobstr!, "nationality": nationalitystr! , "religion": religionstr!, "community_class": communitystr!, "community": castestr!, "address": addressstr!, "email": emailstr!, "sec_email": self.secemail.text as Any, "phone": mobilenumberstr!, "sec_phone":self.secMobileNumber.text as Any, "qualification": qualificationstr!,"status":status!]
                 
                 Alamofire.request(url, method: .post, parameters: parameters,encoding: JSONEncoding.default, headers: nil).responseJSON
                     {
@@ -985,20 +1067,22 @@ class AddViewController: UIViewController,UITextFieldDelegate,UIPickerViewDelega
                                 let alertController = UIAlertController(title: "M3", message: msg, preferredStyle: .alert)
                                 let action1 = UIAlertAction(title: "Ok", style: .default) { (action:UIAlertAction) in
                                     
-                                    self.role.text = ""
-                                    self.name.text = ""
-                                    self.gender.text = ""
-                                    self.dob.text = ""
-                                    self.nationality.text = ""
-                                    self.religion.text = ""
-                                    self.community.text = ""
-                                    self.caste.text = ""
-                                    self.address.text = ""
-                                    self.email.text = ""
-                                    self.secemail.text = ""
-                                    self.mobilenumber.text = ""
-                                    self.secMobileNumber.text = ""
-                                    self.qualification.text = ""
+//                                    self.role.text = ""
+//                                    self.name.text = ""
+//                                    self.gender.text = ""
+//                                    self.dob.text = ""
+//                                    self.nationality.text = ""
+//                                    self.religion.text = ""
+//                                    self.community.text = ""
+//                                    self.caste.text = ""
+//                                    self.address.text = ""
+//                                    self.email.text = ""
+//                                    self.secemail.text = ""
+//                                    self.mobilenumber.text = ""
+//                                    self.secMobileNumber.text = ""
+//                                    self.qualification.text = ""
+                                    
+                                    self.navigationController?.popViewController(animated: true)
                                     
                                     GlobalVariables.user_master_id = String(format: "%@",JSON?["profile_id"] as! CVarArg)
                                     self.webRequest_Image ()
@@ -1037,6 +1121,7 @@ class AddViewController: UIViewController,UITextFieldDelegate,UIPickerViewDelega
             let emailstr = self.email.text
             let mobilenumberstr = self.mobilenumber.text
             let qualificationstr = self.qualification.text
+            let status = self.statusTxtfield.text
 
             if (rolestr!.isEmpty)
             {
@@ -1046,6 +1131,15 @@ class AddViewController: UIViewController,UITextFieldDelegate,UIPickerViewDelega
                 }
                 alertController.addAction(action1)
                 self.present(alertController, animated: true, completion: nil)
+            }
+            else if (namestr!.isEmpty)
+            {
+               let alertController = UIAlertController(title: "M3", message: "", preferredStyle: .alert)
+               let action1 = UIAlertAction(title: "Ok", style: .default) { (action:UIAlertAction) in
+                   print("You've pressed default");
+               }
+               alertController.addAction(action1)
+               self.present(alertController, animated: true, completion: nil)
             }
             else if (namestr!.isEmpty)
             {
@@ -1161,7 +1255,7 @@ class AddViewController: UIViewController,UITextFieldDelegate,UIPickerViewDelega
                 let functionName = "apipia/create_user"
                 let baseUrl = Baseurl.baseUrl + functionName
                 let url = URL(string: baseUrl)!
-                let parameters: Parameters = ["user_id": GlobalVariables.user_id!,"name": namestr!, "sex": genderstr!, "dob": dobstr!, "nationality": nationalitystr! , "religion": religionstr!, "community_class": communitystr!, "community": castestr!, "address": addressstr!, "email": emailstr!, "sec_email": self.secemail.text as Any, "phone": mobilenumberstr!, "sec_phone":self.secMobileNumber.text as Any, "qualification": qualificationstr!,"select_role":"5"]
+                let parameters: Parameters = ["user_id": GlobalVariables.user_id!,"name": namestr!, "sex": genderstr!, "dob": dobstr!, "nationality": nationalitystr! , "religion": religionstr!, "community_class": communitystr!, "community": castestr!, "address": addressstr!, "email": emailstr!, "sec_email": self.secemail.text as Any, "phone": mobilenumberstr!, "sec_phone":self.secMobileNumber.text as Any, "qualification": qualificationstr!,"select_role":roleType!,"status":status!]
                 
                 Alamofire.request(url, method: .post, parameters: parameters,encoding: JSONEncoding.default, headers: nil).responseJSON
                     {
@@ -1179,23 +1273,24 @@ class AddViewController: UIViewController,UITextFieldDelegate,UIPickerViewDelega
                                 let alertController = UIAlertController(title: "M3", message: msg, preferredStyle: .alert)
                                 let action1 = UIAlertAction(title: "Ok", style: .default) { (action:UIAlertAction) in
                                     
-                                    self.role.text = ""
-                                    self.name.text = ""
-                                    self.gender.text = ""
-                                    self.dob.text = ""
-                                    self.nationality.text = ""
-                                    self.religion.text = ""
-                                    self.community.text = ""
-                                    self.caste.text = ""
-                                    self.address.text = ""
-                                    self.email.text = ""
-                                    self.secemail.text = ""
-                                    self.mobilenumber.text = ""
-                                    self.secMobileNumber.text = ""
-                                    self.qualification.text = ""
+//                                    self.role.text = ""
+//                                    self.name.text = ""
+//                                    self.gender.text = ""
+//                                    self.dob.text = ""
+//                                    self.nationality.text = ""
+//                                    self.religion.text = ""
+//                                    self.community.text = ""
+//                                    self.caste.text = ""
+//                                    self.address.text = ""
+//                                    self.email.text = ""
+//                                    self.secemail.text = ""
+//                                    self.mobilenumber.text = ""
+//                                    self.secMobileNumber.text = ""
+//                                    self.qualification.text = ""
                                     
                                     GlobalVariables.user_master_id = String(format: "%@",JSON?["profile_id"] as! CVarArg)
                                     self.webRequest_Image ()
+                                    self.dismiss(animated: true, completion: nil)
                                 }
                                 alertController.addAction(action1)
                                 self.present(alertController, animated: true, completion: nil)
@@ -1238,7 +1333,8 @@ class AddViewController: UIViewController,UITextFieldDelegate,UIPickerViewDelega
             let emailstr = self.email.text
             let mobilenumberstr = self.mobilenumber.text
             let qualificationstr = self.qualification.text
-            
+            let status = self.statusTxtfield.text
+
             if (rolestr!.isEmpty)
             {
                 let alertController = UIAlertController(title: "M3", message: "", preferredStyle: .alert)
@@ -1361,7 +1457,7 @@ class AddViewController: UIViewController,UITextFieldDelegate,UIPickerViewDelega
                 let functionName = "apimain/update_user/"
                 let baseUrl = Baseurl.baseUrl + functionName
                 let url = URL(string: baseUrl)!
-                let parameters: Parameters = ["user_id": GlobalVariables.user_id!,"user_master_id":GlobalVariables.user_master_id!,"name": namestr!, "sex": genderstr!, "dob": dobstr!, "nationality": nationalitystr! , "religion": religionstr!, "community_class": communitystr!, "community": castestr!, "address": addressstr!, "email": emailstr!, "sec_email": self.secemail.text as Any, "phone": mobilenumberstr!, "sec_phone":self.secMobileNumber.text as Any, "qualification": qualificationstr!,"status":rolestr!]
+                let parameters: Parameters = ["user_id": GlobalVariables.user_id!,"user_master_id":GlobalVariables.user_master_id!,"name": namestr!, "sex": genderstr!, "dob": dobstr!, "nationality": nationalitystr! , "religion": religionstr!, "community_class": communitystr!, "community": castestr!, "address": addressstr!, "email": emailstr!, "sec_email": self.secemail.text as Any, "phone": mobilenumberstr!, "sec_phone":self.secMobileNumber.text as Any, "qualification": qualificationstr!,"status":status!]
                 
                 Alamofire.request(url, method: .post, parameters: parameters,encoding: JSONEncoding.default, headers: nil).responseJSON
                     {
@@ -1378,22 +1474,7 @@ class AddViewController: UIViewController,UITextFieldDelegate,UIPickerViewDelega
                                 let alertController = UIAlertController(title: "M3", message: msg, preferredStyle: .alert)
                                 let action1 = UIAlertAction(title: "Ok", style: .default) { (action:UIAlertAction) in
                                     print("You've pressed default");
-                                    
-                                    self.role.text = ""
-                                    self.name.text = ""
-                                    self.gender.text = ""
-                                    self.dob.text = ""
-                                    self.nationality.text = ""
-                                    self.religion.text = ""
-                                    self.community.text = ""
-                                    self.caste.text = ""
-                                    self.address.text = ""
-                                    self.email.text = ""
-                                    self.secemail.text = ""
-                                    self.mobilenumber.text = ""
-                                    self.secMobileNumber.text = ""
-                                    self.qualification.text = ""
-                                    
+                                    self.navigationController?.popViewController(animated: true)
 //                                    GlobalVariables.user_master_id = String(format: "%@",JSON?["profile_id"] as! CVarArg)
 //                                    self.webRequest_Image ()
                                 }
@@ -1430,7 +1511,7 @@ class AddViewController: UIViewController,UITextFieldDelegate,UIPickerViewDelega
             let emailstr = self.email.text
             let mobilenumberstr = self.mobilenumber.text
             let qualificationstr = self.qualification.text
-            
+            let status = self.statusTxtfield.text
             
             if (rolestr!.isEmpty)
             {
@@ -1554,7 +1635,7 @@ class AddViewController: UIViewController,UITextFieldDelegate,UIPickerViewDelega
                 let functionName = "apipia/update_user/"
                 let baseUrl = Baseurl.baseUrl + functionName
                 let url = URL(string: baseUrl)!
-                let parameters: Parameters = ["user_id": GlobalVariables.user_id!,"user_master_id":GlobalVariables.user_master_id!,"name": namestr!, "sex": genderstr!, "dob": dobstr!, "nationality": nationalitystr! , "religion": religionstr!, "community_class": communitystr!, "community": castestr!, "address": addressstr!, "email": emailstr!, "sec_email": self.secemail.text as Any, "phone": mobilenumberstr!, "sec_phone":self.secMobileNumber.text as Any, "qualification": qualificationstr!,"select_role":rolestr!]
+                let parameters: Parameters = ["user_id": GlobalVariables.user_id!,"user_master_id":GlobalVariables.user_master_id!,"name": namestr!, "sex": genderstr!, "dob": dobstr!, "nationality": nationalitystr! , "religion": religionstr!, "community_class": communitystr!, "community": castestr!, "address": addressstr!, "email": emailstr!, "sec_email": self.secemail.text as Any, "phone": mobilenumberstr!, "sec_phone":self.secMobileNumber.text as Any, "qualification": qualificationstr!,"select_role":roleType!,"status":status!]
                 
                 Alamofire.request(url, method: .post, parameters: parameters,encoding: JSONEncoding.default, headers: nil).responseJSON
                     {
@@ -1570,25 +1651,7 @@ class AddViewController: UIViewController,UITextFieldDelegate,UIPickerViewDelega
                             {
                                 let alertController = UIAlertController(title: "M3", message: msg, preferredStyle: .alert)
                                 let action1 = UIAlertAction(title: "Ok", style: .default) { (action:UIAlertAction) in
-                                    print("You've pressed default");
-                                    
-                                    self.role.text = ""
-                                    self.name.text = ""
-                                    self.gender.text = ""
-                                    self.dob.text = ""
-                                    self.nationality.text = ""
-                                    self.religion.text = ""
-                                    self.community.text = ""
-                                    self.caste.text = ""
-                                    self.address.text = ""
-                                    self.email.text = ""
-                                    self.secemail.text = ""
-                                    self.mobilenumber.text = ""
-                                    self.secMobileNumber.text = ""
-                                    self.qualification.text = ""
-                                    
-//                                    GlobalVariables.user_master_id = String(format: "%@",JSON?["profile_id"] as! CVarArg)
-//                                    self.webRequest_Image ()
+                                    self.navigationController?.popViewController(animated: true)
                                 }
                                 alertController.addAction(action1)
                                 self.present(alertController, animated: true, completion: nil)
@@ -1617,13 +1680,13 @@ class AddViewController: UIViewController,UITextFieldDelegate,UIPickerViewDelega
 
         if imgData == nil
         {
-            let alertController = UIAlertController(title: "M3", message: "successfully updated", preferredStyle: .alert)
-            let action1 = UIAlertAction(title: "Ok", style: .default) { (action:UIAlertAction) in
-                print("You've pressed default");
-                
-            }
-            alertController.addAction(action1)
-            self.present(alertController, animated: true, completion: nil)
+//            let alertController = UIAlertController(title: "M3", message: "successfully updated", preferredStyle: .alert)
+//            let action1 = UIAlertAction(title: "Ok", style: .default) { (action:UIAlertAction) in
+//                print("You've pressed default");
+//                
+//            }
+//            alertController.addAction(action1)
+//            self.present(alertController, animated: true, completion: nil)
         }
         else
         {

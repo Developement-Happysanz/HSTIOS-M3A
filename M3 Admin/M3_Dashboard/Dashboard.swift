@@ -11,29 +11,17 @@ import SideMenu
 
 class Dashboard: UIViewController
 {
-    
     @IBOutlet weak var viewOne: UIView!
-    
     @IBOutlet weak var viewTwo: UIView!
-    
     @IBOutlet weak var viewThree: UIView!
-    
     @IBOutlet weak var viewFour: UIView!
-    
     @IBOutlet weak var viewFive: UIView!
-    
     @IBOutlet weak var mobiliserLabel: UILabel!
-    
     @IBOutlet weak var studentsLabel: UILabel!
-    
     @IBOutlet weak var centerinfoLabel: UILabel!
-    
     @IBOutlet weak var tradeLabel: UILabel!
-    
     @IBOutlet weak var taskLabel: UILabel!
-    
     @IBOutlet weak var bell_Image: UIBarButtonItem!
-    
     @IBAction func mobiliserButton(_ sender: Any)
     {
         if GlobalVariables.user_type_name == "TNSRLM"
@@ -76,25 +64,29 @@ class Dashboard: UIViewController
         self.performSegue(withIdentifier: "dashboard_task", sender: self)
     }
     
-    override func viewDidLoad() {
+    override func viewDidLoad()
+    {
         super.viewDidLoad()
-
         // Do any additional setup after loading the view.
-        
         NavigationBarTitleColor.navbar_TitleColor
-
         self.navigationController?.navigationBar.setValue(true, forKey: "hidesShadow")
         
+        GlobalVariables.user_id = (UserDefaults.standard.object(forKey: "userIdKey") as! String)
+        GlobalVariables.name = (UserDefaults.standard.object(forKey: "nameKey") as! String)
+        GlobalVariables.user_name = (UserDefaults.standard.object(forKey: "userNameKey") as! String)
+        GlobalVariables.user_pic = (UserDefaults.standard.object(forKey: "userPicKey") as! String)
+        GlobalVariables.user_type = (UserDefaults.standard.object(forKey: "userTypeKey") as! String)
+        GlobalVariables.user_type_name = (UserDefaults.standard.object(forKey: "userTypeNameKey") as! String)
+        GlobalVariables.pia_unique_number = (UserDefaults.standard.object(forKey: "piaUniqueNumberKey") ?? "") as? String
+        GlobalVariables.scheme_id = (UserDefaults.standard.object(forKey: "scheme_idKey") as! String)
+
+        
         navigationLeftButton ()
-        
-        loadValues ()
-        
         if GlobalVariables.user_type_name == "TNSRLM"
         {
+            //loadValues ()
             roundedCorners ()
-
             viewFive.isHidden = true
-            
         }
         else
         {
@@ -102,7 +94,19 @@ class Dashboard: UIViewController
             roundedCorners ()
             viewFive.isHidden = false
         }
-        
+    }
+    
+    override func viewWillAppear(_ animated: Bool) {
+        NavigationBarTitleColor.navbar_TitleColor
+        GlobalVariables.user_id = (UserDefaults.standard.object(forKey: "userIdKey") as! String)
+        GlobalVariables.name = (UserDefaults.standard.object(forKey: "nameKey") as! String)
+        GlobalVariables.user_name = (UserDefaults.standard.object(forKey: "userNameKey") as! String)
+        GlobalVariables.user_pic = (UserDefaults.standard.object(forKey: "userPicKey") as! String)
+        GlobalVariables.user_type = (UserDefaults.standard.object(forKey: "userTypeKey") as! String)
+        GlobalVariables.user_type_name = (UserDefaults.standard.object(forKey: "userTypeNameKey") as! String)
+        GlobalVariables.pia_unique_number = (UserDefaults.standard.object(forKey: "piaUniqueNumberKey") ?? "") as? String
+        GlobalVariables.scheme_id = (UserDefaults.standard.object(forKey: "scheme_idKey") as! String)
+
     }
     
     func navigationLeftButton ()
@@ -126,6 +130,7 @@ class Dashboard: UIViewController
             self.navigationItem.setLeftBarButton(navigationButton, animated: true)
         }
     }
+    
     @objc func clickButton()
     {
         if GlobalVariables.user_type_name == "TNSRLM"
@@ -138,28 +143,25 @@ class Dashboard: UIViewController
         }
     }
     
-    func loadValues()
-    {
+//    func loadValues()
+//    {
 //        mobiliserLabel.text = "Mobiliser" + " " + "-" +  " " + GlobalVariables.mobilizer_count!
-//
 //        centerinfoLabel.text = "Center Information" + " " + "-" +  " " + GlobalVariables.center_count!
-//
 //        studentsLabel.text = "Students" + " " + "-" +  " " + GlobalVariables.student_count!
-//
 //        taskLabel.text = "Task" + " " + "-" +  " " + GlobalVariables.task_count!
-
-    }
+//    }
+    
     fileprivate func setupSideMenu()
     {
-        // Define the menus
+        //Define the menus
         SideMenuManager.default.menuLeftNavigationController = storyboard!.instantiateViewController(withIdentifier: "LeftMenuNavigationController") as? UISideMenuNavigationController
         
-        // Enable gestures. The left and/or right menus must be set up above for these to work.
-        // Note that these continue to work on the Navigation Controller independent of the View Controller it displays!
+        //Enable gestures. The left and/or right menus must be set up above for these to work.
+        //Note that these continue to work on the Navigation Controller independent of the View Controller it displays!
         SideMenuManager.default.menuAddPanGestureToPresent(toView: self.navigationController!.navigationBar)
         SideMenuManager.default.menuAddScreenEdgePanGesturesToPresent(toView: self.navigationController!.view)
-        
     }
+    
     fileprivate func roundedCorners ()
     {
         viewOne.layer.cornerRadius = 4.0

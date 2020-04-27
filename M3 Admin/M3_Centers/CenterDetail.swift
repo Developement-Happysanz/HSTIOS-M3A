@@ -24,23 +24,14 @@ class CenterDetail: UIViewController,YouTubePlayerDelegate,UITextViewDelegate
     var videoUrl = [String]()
 
     @IBOutlet weak var imageviewOne: UIImageView!
-    
     @IBOutlet weak var imageviewTwo: UIImageView!
-    
     @IBOutlet weak var imageviewThree: UIImageView!
-    
     @IBOutlet weak var videoplayerOne: YouTubePlayerView!
-    
     @IBOutlet weak var videoplayerTwo: YouTubePlayerView!
-    
     @IBOutlet weak var videoplayerThree: YouTubePlayerView!
-    
     @IBOutlet weak var centerLogo: UIImageView!
-    
     @IBOutlet weak var centerName: UILabel!
-    
     @IBOutlet weak var centerDetail: UITextView!
-    
     @IBAction func galleryButton(_ sender: Any)
     {
         self.performSegue(withIdentifier: "centerDetail_Gallery", sender: self)
@@ -72,7 +63,7 @@ class CenterDetail: UIViewController,YouTubePlayerDelegate,UITextViewDelegate
         }
         
         centerDetail.delegate = self
-        
+        centerDetail.backgroundColor = UIColor.white
         navigationLeftButton ()
         
     }
@@ -94,7 +85,6 @@ class CenterDetail: UIViewController,YouTubePlayerDelegate,UITextViewDelegate
     
     func webRequest ()
     {
-        
         let functionName = "apipia/center_details"
         let baseUrl = Baseurl.baseUrl + functionName
         let url = URL(string: baseUrl)!
@@ -111,22 +101,24 @@ class CenterDetail: UIViewController,YouTubePlayerDelegate,UITextViewDelegate
                     let status = JSON?["status"] as? String
                     if (status == "success")
                     {
-                        var centerList = JSON?["cenerDetails"] as? [Any]
+                        let centerList = JSON?["cenerDetails"] as? [Any]
                         for i in 0..<(centerList?.count ?? 0)
                         {
-                            var dict = centerList?[i] as? [AnyHashable : Any]
+                            let dict = centerList?[i] as? [AnyHashable : Any]
                             self.centerName.text = dict?["center_name"] as? String
                             let centerdetails   = dict?["center_info"] as? String
                             self.centerDetail.text = centerdetails
                             let center_logo = dict?["center_logo"] as? String
                             
-                            let url = URL(string:center_logo!)
-                            if let data = try? Data(contentsOf: url!)
+                            if center_logo != "http://iyerandrao.com/application/assets/center/logo/"
                             {
-                                let image: UIImage = UIImage(data: data)!
-                                self.centerLogo.image = image
+                                let url = URL(string:center_logo!)
+                                if let data = try? Data(contentsOf: url!)
+                                {
+                                    let image: UIImage = UIImage(data: data)!
+                                    self.centerLogo.image = image
+                                }
                             }
-                            
                         }
                     }
                     else
@@ -164,10 +156,10 @@ class CenterDetail: UIViewController,YouTubePlayerDelegate,UITextViewDelegate
                     let status = JSON?["status"] as? String
                     if (status == "success")
                     {
-                        var centerGallery = JSON?["centerGallery"] as? [Any]
+                        let centerGallery = JSON?["centerGallery"] as? [Any]
                         for i in 0..<(centerGallery?.count ?? 0)
                         {
-                            var dict = centerGallery?[i] as? [AnyHashable : Any]
+                            let dict = centerGallery?[i] as? [AnyHashable : Any]
                             let center_photo = dict?["center_photo"] as? String
                             let gallery_id = dict?["gallery_id"] as? String
                     
@@ -247,10 +239,10 @@ class CenterDetail: UIViewController,YouTubePlayerDelegate,UITextViewDelegate
                     let status = JSON?["status"] as? String
                     if (status == "success")
                     {
-                        var centerVideos = JSON?["centerVideos"] as? [Any]
+                        let centerVideos = JSON?["centerVideos"] as? [Any]
                         for i in 0..<(centerVideos?.count ?? 0)
                         {
-                            var dict = centerVideos?[i] as? [AnyHashable : Any]
+                            let dict = centerVideos?[i] as? [AnyHashable : Any]
                             let video_id = dict?["video_id"] as? String
                             let video_title   = dict?["video_title"] as? String
                             let video_url  = dict?["video_url"] as? String
@@ -289,7 +281,7 @@ class CenterDetail: UIViewController,YouTubePlayerDelegate,UITextViewDelegate
         else
         {
             videoplayerOne.delegate = self
-            videoplayerOne.loadVideoID("WNeLUngb-Xg")
+           // videoplayerOne.loadVideoID("WNeLUngb-Xg")
         }
         
         let isIndexTwo = videoUrl.indices.contains(1)
@@ -302,7 +294,7 @@ class CenterDetail: UIViewController,YouTubePlayerDelegate,UITextViewDelegate
         else
         {
             videoplayerTwo.delegate = self
-            videoplayerTwo.loadVideoID("WNeLUngb-Xg")
+            //videoplayerTwo.loadVideoID("WNeLUngb-Xg")
         }
 
         let isIndexThree = videoUrl.indices.contains(2)
@@ -315,7 +307,7 @@ class CenterDetail: UIViewController,YouTubePlayerDelegate,UITextViewDelegate
         else
         {
             videoplayerThree.delegate = self
-            videoplayerThree.loadVideoID("WNeLUngb-Xg")
+            //videoplayerThree.loadVideoID("WNeLUngb-Xg")
         }
         
     }

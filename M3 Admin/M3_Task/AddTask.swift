@@ -13,65 +13,69 @@ import MBProgressHUD
 class AddTask: UIViewController,UITextFieldDelegate,UIPickerViewDelegate,UIPickerViewDataSource,UITextViewDelegate {
 
     var name : NSMutableArray = NSMutableArray()
-    
     var user_id : NSMutableArray = NSMutableArray()
-    
     var picker = UIPickerView()
-    
     var datePicker = UIDatePicker()
-    
+    var task_id = [String]()
+    var taskImage = [String]()
+    var strTaskID = String()
+    var struserID = String()
+
+    @IBOutlet weak var headingLabel: UILabel!
+    @IBOutlet weak var viewPhotoOutlet: UIButton!
     @IBOutlet var scrollView: UIScrollView!
-    
     @IBOutlet var tasktitle: UITextField!
-    
     @IBOutlet var taskdate: UITextField!
-    
     @IBOutlet var taskDetails: UITextView!
-    
     @IBOutlet var assignedto: UITextField!
-    
     @IBOutlet var saveOutlet: UIButton!
-    
     @IBAction func saveButton(_ sender: Any)
     {
-        addVaues ()
+        let str = UserDefaults.standard.string(forKey: "Task_View")
+        if str == "fromList"
+        {
+            updateVaues()
+        }
+        else
+        {
+            addVaues ()
+        }
     }
     
     override func viewDidLoad() {
         super.viewDidLoad()
 
         // Do any additional setup after loading the view.
-        
         NavigationBarTitleColor.navbar_TitleColor
-
         self.title = "Add Task"
-        
         tasktitle.delegate = self
-        
         taskdate.delegate = self
-
         taskDetails.delegate = self
-
         assignedto.delegate = self
-        
         saveOutlet.layer.cornerRadius = 4
-        
-        assignedto.layer.cornerRadius = 4
-        assignedto.layer.borderWidth = 1.0
-        assignedto.layer.borderColor = UIColor.black.cgColor
-        
+//      assignedto.layer.cornerRadius = 4
+//      assignedto.layer.borderWidth = 1.0
+//      assignedto.layer.borderColor = UIColor.black.cgColor
         let tap: UITapGestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(dismissKeyboard))
-        
         view.addGestureRecognizer(tap)
-        
-        webRequest ()
-        
-       let str = UserDefaults.standard.string(forKey: "Task_View")
-        
+        let str = UserDefaults.standard.string(forKey: "Task_View")
         if str == "fromList"
         {
+            self.headingLabel.text  = "Status"
+            name = ["Assigned","Ongoing","Completed"]
             ViewDetails ()
+            self.saveOutlet.setTitle("Update", for: UIControl.State.normal)
+            self.viewPhotoOutlet.isHidden = false
+
         }
+        else
+        {
+            self.headingLabel.text  = "Task Assigned To"
+            self.saveOutlet.setTitle("Save", for: UIControl.State.normal)
+            self.viewPhotoOutlet.isHidden = true
+            webRequest ()
+        }
+        self.taskDetails.backgroundColor = UIColor.white
     }
     
     @objc func dismissKeyboard()
@@ -98,10 +102,10 @@ class AddTask: UIViewController,UITextFieldDelegate,UIPickerViewDelegate,UIPicke
                     let status = JSON?["status"] as? String
                     if (status == "success")
                     {
-                        var userList = JSON?["userList"] as? [Any]
+                        let userList = JSON?["userList"] as? [Any]
                         for i in 0..<(userList?.count ?? 0)
                         {
-                            var dict = userList?[i] as? [AnyHashable : Any]
+                            let dict = userList?[i] as? [AnyHashable : Any]
                             let mob_name = dict?["name"] as? String
                             let userID = dict?["user_id"] as? String
                             
@@ -144,14 +148,16 @@ class AddTask: UIViewController,UITextFieldDelegate,UIPickerViewDelegate,UIPicke
                     let status = JSON?["status"] as? String
                     if (status == "success")
                     {
-                        var taskDetails = JSON?["taskDetails"] as? [Any]
+                        let taskDetails = JSON?["taskDetails"] as? [Any]
                         for i in 0..<(taskDetails?.count ?? 0)
                         {
-                            var dict = taskDetails?[i] as? [AnyHashable : Any]
+                            let dict = taskDetails?[i] as? [AnyHashable : Any]
                             self.taskdate.text = dict?["task_date"] as? String
                             self.taskDetails.text = dict?["task_description"] as? String
                             self.tasktitle.text = dict?["task_title"] as? String
-                            self.assignedto.text = GlobalVariables.mobiliser_name
+                            self.assignedto.text = dict?["status"] as? String
+                            self.strTaskID = (dict?["id"] as? String)!
+                            self.struserID = (dict?["user_id"] as? String)!
                         }
                         
                     }
@@ -176,6 +182,8 @@ class AddTask: UIViewController,UITextFieldDelegate,UIPickerViewDelegate,UIPicke
         
         picker = UIPickerView(frame: CGRect(x: 0, y: 0, width: self.view.frame.size.width, height: 216))
         picker.backgroundColor = .white
+        self.picker.setValue(UIColor.black, forKey: "textColor")
+
         
         picker.showsSelectionIndicator = true
         picker.delegate = self
@@ -227,8 +235,7 @@ class AddTask: UIViewController,UITextFieldDelegate,UIPickerViewDelegate,UIPicke
     
     @objc func mobiliserpickercancelClick ()
     {
-       assignedto.resignFirstResponder()
-
+      assignedto.resignFirstResponder()
     }
     
     func pickStartDate(_ textField : UITextField)
@@ -237,7 +244,8 @@ class AddTask: UIViewController,UITextFieldDelegate,UIPickerViewDelegate,UIPicke
         self.datePicker.backgroundColor = UIColor.white
         self.datePicker.datePickerMode = .date
         taskdate.inputView = self.datePicker
-        
+        self.datePicker.setValue(UIColor.black, forKey: "textColor")
+
         //ToolBar
         let toolbar = UIToolbar();
         toolbar.sizeToFit()
@@ -486,13 +494,11 @@ class AddTask: UIViewController,UITextFieldDelegate,UIPickerViewDelegate,UIPicke
         else
         {
             MBProgressHUD.showAdded(to: self.view, animated: true)
-            let value = self.assignedto.text;
-            let index = name.index(of: value!)
-            let mobId = user_id[index]
+            //let value = self.assignedto.text;
             let functionName = "apipia/update_task"
             let baseUrl = Baseurl.baseUrl + functionName
             let url = URL(string: baseUrl)!
-            let parameters: Parameters = ["user_id": GlobalVariables.user_id!, "mob_id": mobId, "task_title": self.tasktitle.text as Any, "task_description": self.taskDetails.text as Any, "task_date": self.taskdate.text as Any]
+            let parameters: Parameters = ["user_id": GlobalVariables.user_id!, "mob_id": struserID, "task_title": self.tasktitle.text as Any, "task_description": self.taskDetails.text as Any, "task_date": self.taskdate.text as Any, "status": self.assignedto.text!,"task_id":self.strTaskID]
             
             Alamofire.request(url, method: .post, parameters: parameters,encoding: JSONEncoding.default, headers: nil).responseJSON
                 {
@@ -510,11 +516,12 @@ class AddTask: UIViewController,UITextFieldDelegate,UIPickerViewDelegate,UIPicke
                             let alertController = UIAlertController(title: "M3", message: msg, preferredStyle: .alert)
                             let action1 = UIAlertAction(title: "Ok", style: .default) { (action:UIAlertAction) in
                                 print("You've pressed default");
+                                //self.performSegue(withIdentifier: "to_Task", sender: self)
+                                self.navigationController?.popViewController(animated: true)
                             }
                             alertController.addAction(action1)
                             self.present(alertController, animated: true, completion: nil)
                             
-                            self.performSegue(withIdentifier: "to_Task", sender: self)
 
                         }
                         else
@@ -533,14 +540,80 @@ class AddTask: UIViewController,UITextFieldDelegate,UIPickerViewDelegate,UIPicke
             }
         }
     }
-    /*
+    
+    @IBAction func viewPhoto(_ sender: Any)
+    {
+        self.taskImageRequest()
+    }
+    
+    func taskImageRequest ()
+    {
+        let functionName = "apimobilizer/list_taskpic/"
+        let baseUrl = Baseurl.baseUrl + functionName
+        let url = URL(string: baseUrl)!
+        let parameters: Parameters = ["task_id": GlobalVariables.task_id!]
+        MBProgressHUD.showAdded(to: self.view, animated: true)
+        Alamofire.request(url, method: .post, parameters: parameters,encoding: JSONEncoding.default, headers: nil).responseJSON
+            {
+                response in
+                switch response.result
+                {
+                case .success:
+                    MBProgressHUD.hide(for: self.view, animated: true)
+                    print(response)
+                    let JSON = response.result.value as? [String: Any]
+                    let msg = JSON?["msg"] as? String
+                    let status = JSON?["status"] as? String
+                    if (status == "Sucess")
+                    {
+                       let taskDetails = JSON?["Taskpictures"] as? [Any]
+                       
+                       self.task_id.removeAll()
+                       self.taskImage.removeAll()
+                
+                       for i in 0..<(taskDetails?.count ?? 0)
+                       {
+                           let dict = taskDetails?[i] as? [AnyHashable : Any]
+                           let taskid = dict?["task_id"] as? String
+                           let task_Image = dict?["task_image"] as? String
+                        
+                           self.task_id.append(taskid ?? "")
+                           self.taskImage.append(task_Image ?? "")
+                       }
+                        
+                        self.performSegue(withIdentifier: "to_Gallery", sender: self)
+                        
+                    }
+                    else
+                    {
+                        let alertController = UIAlertController(title: "M3", message: msg, preferredStyle: .alert)
+                        let action1 = UIAlertAction(title: "Ok", style: .default) { (action:UIAlertAction) in
+                           // print("You've pressed default");
+                        }
+                        alertController.addAction(action1)
+                        self.present(alertController, animated: true, completion: nil)
+                    }
+                    break
+                case .failure(let error):
+                    print(error)
+                }
+        }
+    }
+    
+    
     // MARK: - Navigation
 
     // In a storyboard-based application, you will often want to do a little preparation before navigation
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         // Get the new view controller using segue.destination.
         // Pass the selected object to the new view controller.
+        
+        if (segue.identifier == "to_Gallery") {
+            let vc = segue.destination as! GalleryList
+            vc.centerPhoto = self.taskImage
+            vc.fromScheme = "YES"
+        }
     }
-    */
+    
 
 }

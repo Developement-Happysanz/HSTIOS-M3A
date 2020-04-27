@@ -99,6 +99,20 @@ class GlobalVariables: NSObject
     static var qualification: String?
     static var user_master_id: String?
     
+    static var degree: String?
+    static var yearOfEducation: String?
+    static var yearofPassing: String?
+    static var identificationMarksOne: String?
+    static var identificationMarksTwo: String?
+    static var headOfFamily: String?
+    static var highestEducation: String?
+    static var fatherMobile: String?
+    static var motherMobile: String?
+    static var yearlyIncome: String?
+    static var languagesKnown: String?
+    static var numberOfMembers: String?
+    static var jobCard: String?
+    
     /* user details */
     static var task_id: String?
     static var mobiliser_name: String?
@@ -109,5 +123,19 @@ class GlobalVariables: NSObject
     static var track_name: String?
     static var admissiondate: String?
     static var user_created_at: String?
+    
+    /*TNSRLM */
+    
+    static var center_count: String?
+    static var mobilizer_count: String?
+    static var student_count: String?
+    static var pia_count: String?
+
+    /*PIA */
+       
+    static var pia_unique_number: String?
+    static var scheme_id: String?
+    static var mobilizer_id: String?
+    static var selectedMobilizerName: String?
 
 }

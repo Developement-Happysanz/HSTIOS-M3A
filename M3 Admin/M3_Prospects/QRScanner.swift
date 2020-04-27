@@ -15,7 +15,7 @@ class QRScanner: UIViewController,AVCaptureMetadataOutputObjectsDelegate,XMLPars
     
     @IBAction func cancelButton(_ sender: Any)
     {
-        self.performSegue(withIdentifier: "qrscanner_page", sender: self)
+        self.performSegue(withIdentifier: "back_list", sender: self)
     }
     
     override func viewDidLoad()
@@ -98,7 +98,7 @@ class QRScanner: UIViewController,AVCaptureMetadataOutputObjectsDelegate,XMLPars
     
     @objc func clickButton()
     {
-        self.performSegue(withIdentifier: "qrscanner_page", sender: self)
+        self.performSegue(withIdentifier: "back_list", sender: self)
     }
     
     func failed() {

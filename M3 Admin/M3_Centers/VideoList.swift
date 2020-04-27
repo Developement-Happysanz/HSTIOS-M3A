@@ -15,6 +15,7 @@ class VideoList: UIViewController,YouTubePlayerDelegate,UITableViewDataSource,UI
    
     var videoTitle = [String]()
     var videoUrl = [String]()
+    var video_id = [String]()
 
     @IBOutlet weak var tableView: UITableView!
     override func viewDidLoad() {
@@ -43,7 +44,7 @@ class VideoList: UIViewController,YouTubePlayerDelegate,UITableViewDataSource,UI
     }
     func webRequest ()
     {
-        let functionName = "apimobilizer/view_centervideos/"
+        let functionName = "apipia/center_videos/"
         let baseUrl = Baseurl.baseUrl + functionName
         let url = URL(string: baseUrl)!
         let parameters: Parameters = ["user_id": GlobalVariables.user_id!, "center_id": GlobalVariables.center_id!]
@@ -57,17 +58,19 @@ class VideoList: UIViewController,YouTubePlayerDelegate,UITableViewDataSource,UI
                     let JSON = response.result.value as? [String: Any]
                     let msg = JSON?["msg"] as? String
                     let status = JSON?["status"] as? String
-                    if (status == "Sucess")
+                    if (status == "success")
                     {
-                        var centerVideos = JSON?["Videos"] as? [Any]
+                        let centerVideos = JSON?["centerVideos"] as? [Any]
                         for i in 0..<(centerVideos?.count ?? 0)
                         {
-                            var dict = centerVideos?[i] as? [AnyHashable : Any]
+                            let dict = centerVideos?[i] as? [AnyHashable : Any]
                             let video_title = dict?["video_title"] as? String
                             let video_url = dict?["video_url"] as? String
+                            let videoID = dict?["video_id"] as? String
 
                             self.videoTitle.append(video_title ?? "")
                             self.videoUrl.append(video_url ?? "")
+                            self.video_id.append(videoID ?? "")
 
                         }
                         
@@ -75,6 +78,7 @@ class VideoList: UIViewController,YouTubePlayerDelegate,UITableViewDataSource,UI
                     }
                     else
                     {
+                        self.tableView.reloadData()
                         let alertController = UIAlertController(title: "M3", message: msg, preferredStyle: .alert)
                         let action1 = UIAlertAction(title: "Ok", style: .default) { (action:UIAlertAction) in
                             print("You've pressed default");
@@ -111,7 +115,58 @@ class VideoList: UIViewController,YouTubePlayerDelegate,UITableViewDataSource,UI
     {
         return 263
     }
-//
+
+    func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCell.EditingStyle, forRowAt indexPath: IndexPath)
+      {
+        if (editingStyle == .delete) {
+            // handle delete (by removing the data from your array and updating the tableview)
+            let videoId = video_id[indexPath.row]
+            print(videoId)
+            self.webRequestRemoveFromList(VideoID: videoId)
+        }
+      }
+        
+      func tableView(_ tableView: UITableView, titleForDeleteConfirmationButtonForRowAt indexPath: IndexPath) -> String?
+      {
+         return "Delete"
+      }
+    
+    func webRequestRemoveFromList(VideoID:String)
+    {
+        let functionName = "apipia/center_video_delete"
+        let baseUrl = Baseurl.baseUrl + functionName
+        let url = URL(string: baseUrl)!
+        let parameters: Parameters = ["video_id":VideoID]
+        Alamofire.request(url, method: .post, parameters: parameters,encoding: JSONEncoding.default, headers: nil).responseJSON
+            {
+                response in
+                switch response.result
+                {
+                case .success:
+                    print(response)
+                    let JSON = response.result.value as? [String: Any]
+                    let msg = JSON?["msg"] as? String
+                    let status = JSON?["status"] as? String
+                    if (status == "success")
+                    {
+                        self.webRequest()
+                    }
+                    else
+                    {
+                        let alertController = UIAlertController(title: "M3", message: msg, preferredStyle: .alert)
+                        let action1 = UIAlertAction(title: "Ok", style: .default) { (action:UIAlertAction) in
+                            print("You've pressed default");
+                        }
+                        alertController.addAction(action1)
+                        self.present(alertController, animated: true, completion: nil)
+                    }
+                    break
+                case .failure(let error):
+                     print(error)
+                }
+        }
+    }
+    
     func playerReady(_ videoPlayer: YouTubePlayerView)
     {
         

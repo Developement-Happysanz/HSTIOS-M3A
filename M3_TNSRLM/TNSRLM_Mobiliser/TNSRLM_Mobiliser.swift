@@ -47,13 +47,13 @@ class TNSRLM_Mobiliser: UIViewController,UITableViewDelegate,UITableViewDataSour
                     let status = JSON?["status"] as? String
                     if (status == "success")
                     {
-                        var userList = JSON?["userList"] as? [Any]
+                        let userList = JSON?["userList"] as? [Any]
                         self.name.removeAllObjects()
                         //self.user_type_name.removeAllObjects()
                         //self.user_master_id.removeAllObjects()
                         for i in 0..<(userList?.count ?? 0)
                         {
-                            var dict = userList?[i] as? [AnyHashable : Any]
+                            let dict = userList?[i] as? [AnyHashable : Any]
                             let name = dict?["name"] as? String
                             let mobiliser_id = dict?["user_id"] as? String
                             //let usermaster_id = dict?["user_master_id"] as? String

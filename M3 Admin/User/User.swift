@@ -14,12 +14,11 @@ class User: UIViewController,UITableViewDelegate,UITableViewDataSource
 {
     
     var name : NSMutableArray = NSMutableArray()
-    
     var user_type_name : NSMutableArray = NSMutableArray()
-    
     var status : NSMutableArray = NSMutableArray()
-    
     var user_master_id : NSMutableArray = NSMutableArray()
+    var user_id : NSMutableArray = NSMutableArray()
+
     
     @IBOutlet var tableView: UITableView!
     
@@ -34,7 +33,8 @@ class User: UIViewController,UITableViewDelegate,UITableViewDataSource
 
         // Do any additional setup after loading the view.
        
-        
+        self.tableView.tableFooterView = UIView(frame: .zero)
+        self.tableView.backgroundColor = UIColor.clear
         if GlobalVariables.user_type_name == "TNSRLM"
         {
             webrequestAllUsersTNSRLM ()
@@ -47,17 +47,14 @@ class User: UIViewController,UITableViewDelegate,UITableViewDataSource
             {
                 setupSideMenu()
             }
-            
             webrequestAllUsers ()
         }
-
     }
     
     override func viewWillAppear(_ animated: Bool)
     {
-        if GlobalVariables.user_type_name == "TNSRLM"
+         if GlobalVariables.user_type_name == "TNSRLM"
         {
-           
             navigationLeftButton ()
             let str = UserDefaults.standard.string(forKey: "Tnsrlmstaff")
             if str == "YES"
@@ -92,13 +89,11 @@ class User: UIViewController,UITableViewDelegate,UITableViewDataSource
        
         SideMenuManager.default.menuAddPanGestureToPresent(toView: self.navigationController!.navigationBar)
         SideMenuManager.default.menuAddScreenEdgePanGesturesToPresent(toView: self.navigationController!.view)
-      
     }
     
     func navigationLeftButton ()
     {
         let str = UserDefaults.standard.string(forKey: "fromDashboard")
-        
         if GlobalVariables.user_type_name == "TNSRLM" || str == "YES"
         {
             let navigationLeftButton = UIButton(type: .custom)
@@ -130,7 +125,7 @@ class User: UIViewController,UITableViewDelegate,UITableViewDataSource
             }
             else
             {
-                self.performSegue(withIdentifier: "tnsrlm_PiaList", sender: self)
+                self.performSegue(withIdentifier: "to_Dashboard", sender: self)
             }
         }
         else
@@ -181,23 +176,28 @@ class User: UIViewController,UITableViewDelegate,UITableViewDataSource
                     let status = JSON?["status"] as? String
                     if (status == "success")
                     {
-                        var studentList = JSON?["userList"] as? [Any]
+                        let studentList = JSON?["userList"] as? [Any]
+                        
                         self.name.removeAllObjects()
                         self.user_type_name.removeAllObjects()
                         self.status.removeAllObjects()
                         self.user_master_id.removeAllObjects()
+                        self.user_id.removeAllObjects()
+                        
                         for i in 0..<(studentList?.count ?? 0)
                         {
-                            var dict = studentList?[i] as? [AnyHashable : Any]
+                            let dict = studentList?[i] as? [AnyHashable : Any]
                             let name = dict?["name"] as? String
                             let usertypename = dict?["user_type_name"] as? String
                             let usermaster_id = dict?["user_master_id"] as? String
                             let Status = dict?["status"] as? String
+                            let user_id = dict?["user_id"] as? String
 
                             self.name.add(name!)
                             self.user_type_name.add(usertypename!)
                             self.status.add(Status!)
                             self.user_master_id.add(usermaster_id!)
+                            self.user_id.add(user_id!)
 
                         }
                         
@@ -221,9 +221,7 @@ class User: UIViewController,UITableViewDelegate,UITableViewDataSource
     
     func webrequestAllUsersTNSRLM ()
     {
-       
         let str = UserDefaults.standard.string(forKey: "Tnsrlmstaff")
-        
         if str == "YES"
         {
             let functionName = "apimain/user_list"
@@ -242,24 +240,28 @@ class User: UIViewController,UITableViewDelegate,UITableViewDataSource
                         let status = JSON?["status"] as? String
                         if (status == "success")
                         {
-                            var studentList = JSON?["userList"] as? [Any]
+                            let studentList = JSON?["userList"] as? [Any]
                             self.name.removeAllObjects()
                             self.user_type_name.removeAllObjects()
                             self.status.removeAllObjects()
                             self.user_master_id.removeAllObjects()
+                            self.user_id.removeAllObjects()
+
                             for i in 0..<(studentList?.count ?? 0)
                             {
-                                var dict = studentList?[i] as? [AnyHashable : Any]
+                                let dict = studentList?[i] as? [AnyHashable : Any]
                                 let name = dict?["name"] as? String
                                 let usertypename = dict?["user_type_name"] as? String
                                 let usermaster_id = dict?["user_master_id"] as? String
                                 let Status = dict?["status"] as? String
-                                
+                                let user_id = dict?["user_id"] as? String
+
                                 self.name.add(name!)
                                 self.user_type_name.add(usertypename!)
                                 self.status.add(Status!)
                                 self.user_master_id.add(usermaster_id!)
-                                
+                                self.user_id.add(user_id!)
+
                             }
                             
                             self.tableView.reloadData()
@@ -297,24 +299,29 @@ class User: UIViewController,UITableViewDelegate,UITableViewDataSource
                         let status = JSON?["status"] as? String
                         if (status == "success")
                         {
-                            var studentList = JSON?["userList"] as? [Any]
+                            let studentList = JSON?["userList"] as? [Any]
                             self.name.removeAllObjects()
                             self.user_type_name.removeAllObjects()
                             self.status.removeAllObjects()
                             self.user_master_id.removeAllObjects()
+                            self.user_id.removeAllObjects()
+
+                            
                             for i in 0..<(studentList?.count ?? 0)
                             {
-                                var dict = studentList?[i] as? [AnyHashable : Any]
+                                let dict = studentList?[i] as? [AnyHashable : Any]
                                 let name = dict?["name"] as? String
                                 let usertypename = dict?["user_type_name"] as? String
                                 let usermaster_id = dict?["user_master_id"] as? String
                                 let Status = dict?["status"] as? String
-                                
+                                let user_id = dict?["user_id"] as? String
+
                                 self.name.add(name!)
                                 self.user_type_name.add(usertypename!)
                                 self.status.add(Status!)
                                 self.user_master_id.add(usermaster_id!)
-                                
+                                self.user_id.add(user_id!)
+
                             }
                             
                             self.tableView.reloadData()
@@ -346,8 +353,9 @@ class User: UIViewController,UITableViewDelegate,UITableViewDataSource
         let cell = self.tableView.dequeueReusableCell(withIdentifier: "cell") as! UserTableViewCell
         
         cell.name.text = (name[indexPath.row] as! String)
-        cell.role.text = (user_type_name[indexPath.row] as! String)
+        //cell.role.text = (user_type_name[indexPath.row] as! String)
         cell.status.text = (status[indexPath.row] as! String)
+        
 
         return cell
     }
@@ -355,8 +363,22 @@ class User: UIViewController,UITableViewDelegate,UITableViewDataSource
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath)
     {
         GlobalVariables.user_master_id = (user_master_id[indexPath.row] as! String)
+        GlobalVariables.mobilizer_id = (user_id[indexPath.row] as! String)
+        GlobalVariables.selectedMobilizerName = (name[indexPath.row] as! String)
         UserDefaults.standard.set("fromList", forKey: "user_View") //setObject
-        self.performSegue(withIdentifier: "addUser", sender: self)
+        let str = UserDefaults.standard.object(forKey: "tnsrlmPia") as? String
+        if GlobalVariables.user_type_name != "TNSRLM"
+        {
+            self.performSegue(withIdentifier: "addUser", sender: self)
+        }
+        else
+        {
+            if (str == "staff")
+            {
+               self.performSegue(withIdentifier: "addUser", sender: self)
+            }
+            
+        }
     }
     
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat
@@ -366,12 +388,10 @@ class User: UIViewController,UITableViewDelegate,UITableViewDataSource
     
     /*
     // MARK: - Navigation
-
     // In a storyboard-based application, you will often want to do a little preparation before navigation
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         // Get the new view controller using segue.destination.
         // Pass the selected object to the new view controller.
     }
     */
-
 }

@@ -16,6 +16,10 @@ class UserTableViewCell: UITableViewCell {
     
     @IBOutlet var status: UILabel!
     
+    @IBOutlet weak var downloadOutlet: UIButton!
+    
+    @IBOutlet weak var subView: UIView!
+    
     override func awakeFromNib() {
         super.awakeFromNib()
         // Initialization code

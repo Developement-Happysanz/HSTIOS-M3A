@@ -12,11 +12,8 @@ import MBProgressHUD
 
 class AddVideo: UIViewController,UITextFieldDelegate
 {
-
     @IBOutlet weak var videoTitleLabel: UITextField!
-    
     @IBOutlet weak var videoLink: UITextField!
-    
     @IBOutlet weak var saveOtlet: UIButton!
     
     @IBAction func saveButton(_ sender: Any)
@@ -32,7 +29,6 @@ class AddVideo: UIViewController,UITextFieldDelegate
             }
             alertController.addAction(action1)
             self.present(alertController, animated: true, completion: nil)
-            
         }
         else if(videolink!.isEmpty)
         {
@@ -49,7 +45,7 @@ class AddVideo: UIViewController,UITextFieldDelegate
             let functionName = "apipia/add_center_videos"
             let baseUrl = Baseurl.baseUrl + functionName
             let url = URL(string: baseUrl)!
-            let parameters: Parameters = ["user_id": GlobalVariables.user_id!, "center_id": GlobalVariables.center_id as Any, "video_title": videoTitleLabel.text!, "video_link": videoLink.text!]
+            let parameters: Parameters = ["user_id":GlobalVariables.user_id!, "center_id":GlobalVariables.center_id as Any, "video_title":videoTitleLabel.text!, "video_link":videoLink.text!]
             Alamofire.request(url, method: .post, parameters: parameters,encoding: JSONEncoding.default, headers: nil).responseJSON
                 {
                     response in
@@ -65,9 +61,7 @@ class AddVideo: UIViewController,UITextFieldDelegate
                         {
                             self.videoTitleLabel.text = ""
                             self.videoLink.text = ""
-                            
                             self.performSegue(withIdentifier: "addVideo_videoList", sender: self)
-
                         }
                         else
                         {
@@ -84,32 +78,25 @@ class AddVideo: UIViewController,UITextFieldDelegate
                     }
             }
         }
-        
     }
+    
     @IBOutlet weak var scrollView: UIScrollView!
     
-    override func viewDidLoad() {
+    override func viewDidLoad()
+    {
         super.viewDidLoad()
-
         // Do any additional setup after loading the view.
         self.title = "Add Video"
-        
         videoTitleLabel.delegate = self
-        
         videoLink.delegate = self
-        
         saveOtlet.layer.cornerRadius = 4
-        
-        
         let tap: UITapGestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(dismissKeyboard))
-        
         view.addGestureRecognizer(tap)
-        
         navigationLeftButton ()
-
     }
     
-    @objc func dismissKeyboard() {
+    @objc func dismissKeyboard()
+    {
         //Causes the view (or one of its embedded text fields) to resign the first responder status.
         view.endEditing(true)
     }
@@ -117,7 +104,6 @@ class AddVideo: UIViewController,UITextFieldDelegate
     func textFieldShouldReturn(_ textField: UITextField) -> Bool
     {
         textField.resignFirstResponder()
-        
         return true
     }
     
@@ -159,12 +145,10 @@ class AddVideo: UIViewController,UITextFieldDelegate
     
     /*
     // MARK: - Navigation
-
     // In a storyboard-based application, you will often want to do a little preparation before navigation
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         // Get the new view controller using segue.destination.
         // Pass the selected object to the new view controller.
     }
     */
-
 }

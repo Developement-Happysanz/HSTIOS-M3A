@@ -12,27 +12,16 @@ import SideMenu
 class TNSRLM_Dashboard: UIViewController {
     
     @IBOutlet weak var viewOne: UIView!
-    
     @IBOutlet weak var viewTwo: UIView!
-    
     @IBOutlet weak var viewThree: UIView!
-    
     @IBOutlet weak var viewFour: UIView!
-    
     @IBOutlet weak var viewFive: UIView!
-    
     @IBOutlet weak var PIALabel: UILabel!
-    
     @IBOutlet weak var centerLabel: UILabel!
-    
     @IBOutlet weak var mobiliserLabel: UILabel!
-    
     @IBOutlet weak var studentLabel: UILabel!
-    
     @IBOutlet weak var GraphLabel: UILabel!
-    
     @IBOutlet weak var bell_Image: UIBarButtonItem!
-    
     @IBAction func piaButton(_ sender: Any)
     {
         UserDefaults.standard.set("YES", forKey: "tnsrlmPia")
@@ -47,6 +36,7 @@ class TNSRLM_Dashboard: UIViewController {
     @IBAction func mobiliserButton(_ sender: Any)
     {
         UserDefaults.standard.set("mobiliser", forKey: "tnsrlmPia")
+        UserDefaults.standard.set("YES", forKey: "Tnsrlmstaff")
         self.performSegue(withIdentifier: "TNSRLM_Dashboard_Pia", sender: self)
     }
     
@@ -58,36 +48,52 @@ class TNSRLM_Dashboard: UIViewController {
     
     @IBAction func graphButton(_ sender: Any)
     {
-        
+        UserDefaults.standard.set("graph", forKey: "tnsrlmPia")
+        self.performSegue(withIdentifier: "to_graph", sender: self)
     }
     override func viewDidLoad() {
         super.viewDidLoad()
         
         // Do any additional setup after loading the view.
-        
-        
         NavigationBarTitleColor.navbar_TitleColor
-        
         self.navigationController?.navigationBar.setValue(true, forKey: "hidesShadow")
         
+        GlobalVariables.user_id = (UserDefaults.standard.object(forKey: "userIdKey") as! String)
+        GlobalVariables.name = (UserDefaults.standard.object(forKey: "nameKey") as! String)
+        GlobalVariables.user_name = (UserDefaults.standard.object(forKey: "userNameKey") as! String)
+        GlobalVariables.user_pic = (UserDefaults.standard.object(forKey: "userPicKey") as! String)
+        GlobalVariables.user_type = (UserDefaults.standard.object(forKey: "userTypeKey") as! String)
+        GlobalVariables.user_type_name = (UserDefaults.standard.object(forKey: "userTypeNameKey") as! String)
+        
+        GlobalVariables.center_count =  (UserDefaults.standard.object(forKey: "centerCountKey") as! String)
+        GlobalVariables.mobilizer_count = (UserDefaults.standard.object(forKey: "mobilizerCountKey") as! String)
+        GlobalVariables.student_count = (UserDefaults.standard.object(forKey: "studentCountKey") as! String)
+        GlobalVariables.pia_count = (UserDefaults.standard.object(forKey: "piaCountKey") as! String)
+        
         roundedCorners ()
-        
         setupSideMenu()
-        
         loadValues ()
+    }
+    
+    override func viewWillAppear(_ animated: Bool) {
+        GlobalVariables.user_id = (UserDefaults.standard.object(forKey: "userIdKey") as! String)
+        GlobalVariables.name = (UserDefaults.standard.object(forKey: "nameKey") as! String)
+        GlobalVariables.user_name = (UserDefaults.standard.object(forKey: "userNameKey") as! String)
+        GlobalVariables.user_pic = (UserDefaults.standard.object(forKey: "userPicKey") as! String)
+        GlobalVariables.user_type = (UserDefaults.standard.object(forKey: "userTypeKey") as! String)
+        GlobalVariables.user_type_name = (UserDefaults.standard.object(forKey: "userTypeNameKey") as! String)
         
+        GlobalVariables.center_count =  (UserDefaults.standard.object(forKey: "centerCountKey") as! String)
+        GlobalVariables.mobilizer_count = (UserDefaults.standard.object(forKey: "mobilizerCountKey") as! String)
+        GlobalVariables.student_count = (UserDefaults.standard.object(forKey: "studentCountKey") as! String)
+        GlobalVariables.pia_count = (UserDefaults.standard.object(forKey: "piaCountKey") as! String)
     }
     func loadValues()
     {
-//        mobiliserLabel.text = "Mobiliser" + " " + "-" +  " " + GlobalVariables.mobilizer_count!
-//        
-//        centerLabel.text = "Center Information" + " " + "-" +  " " + GlobalVariables.center_count!
-////
-//        studentLabel.text = "Prospects" + " " + "-" +  " " + GlobalVariables.student_count!
-//
-//        taskLabel.text = "Task" + " " + "-" +  " " + GlobalVariables.task_count!
-        
-        
+        mobiliserLabel.text = "Mobiliser" + " " + "-" +  " " + GlobalVariables.mobilizer_count!
+        centerLabel.text = "Center Information" + " " + "-" +  " " + GlobalVariables.center_count!
+        studentLabel.text = "Prospects" + " " + "-" +  " " + GlobalVariables.student_count!
+        PIALabel.text = "PIA" + " " + "-" +  " " + GlobalVariables.pia_count!
     }
     fileprivate func setupSideMenu()
     {

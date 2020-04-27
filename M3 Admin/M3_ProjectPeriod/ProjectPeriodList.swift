@@ -120,10 +120,10 @@ class ProjectPeriodList: UIViewController,UITableViewDataSource,UITableViewDeleg
                     let status = JSON?["status"] as? String
                     if (status == "success")
                     {
-                        var PeriodList = JSON?["PeriodList"] as? [Any]
+                        let PeriodList = JSON?["PeriodList"] as? [Any]
                         for i in 0..<(PeriodList?.count ?? 0)
                         {
-                            var dict = PeriodList?[i] as? [AnyHashable : Any]
+                            let dict = PeriodList?[i] as? [AnyHashable : Any]
                             let period_from = dict?["period_from"] as? String
                             let period_to = dict?["period_to"] as? String
                             let Status = dict?["status"] as? String

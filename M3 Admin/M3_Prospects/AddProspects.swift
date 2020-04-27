@@ -37,7 +37,8 @@ class AddProspects: UIViewController {
     
     @IBAction func backButton(_ sender: Any)
     {
-        self.performSegue(withIdentifier: "to_Dashboard", sender: self)
+        //self.performSegue(withIdentifier: "to_Dashboard", sender: self)
+        self.dismiss(animated: true, completion: nil)
     }
     
     override func viewDidLoad()

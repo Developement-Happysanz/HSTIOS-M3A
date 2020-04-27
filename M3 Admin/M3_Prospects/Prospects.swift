@@ -14,19 +14,18 @@ class Prospects: UIViewController,UITableViewDelegate,UITableViewDataSource
 {
     
     var student_name : NSMutableArray = NSMutableArray()
-    
     var student_status : NSMutableArray = NSMutableArray()
-    
     var studentID : NSMutableArray = NSMutableArray()
-
+    var student_pic : NSMutableArray = NSMutableArray()
+    var student_Pic = String()
+    
     @IBOutlet var mainView: UIView!
-    
     @IBOutlet weak var tableView: UITableView!
-    
     @IBAction func menuButton(_ sender: Any)
     {
         present(SideMenuManager.default.menuLeftNavigationController!, animated: true, completion: nil)
     }
+    
     override func viewDidLoad() {
         super.viewDidLoad()
 
@@ -41,8 +40,10 @@ class Prospects: UIViewController,UITableViewDelegate,UITableViewDataSource
 
         
        // self.mainView.isHidden = false
+       self.navigationController?.navigationBar.setValue(true, forKey: "hidesShadow")
+       self.tableView.tableFooterView = UIView(frame: .zero)
+       self.tableView.backgroundColor = UIColor.clear
         
-        self.navigationController?.navigationBar.setValue(true, forKey: "hidesShadow")
         
         view.addSubview(segmentedControlContainerView)
         segmentedControlContainerView.addSubview(segmentedControl)
@@ -132,7 +133,7 @@ class Prospects: UIViewController,UITableViewDelegate,UITableViewDataSource
 
         if GlobalVariables.user_type_name == "TNSRLM"
         {
-            self.performSegue(withIdentifier: "prospects_TNSRLMDasboard", sender: self)
+            self.performSegue(withIdentifier: "to_Dashboard", sender: self)
         }
         else
         {
@@ -161,14 +162,14 @@ class Prospects: UIViewController,UITableViewDelegate,UITableViewDataSource
     
     private enum Constants {
         static let segmentedControlHeight: CGFloat = 50
-        static let underlineViewColor: UIColor = .white
+        static let underlineViewColor: UIColor = .red
         static let underlineViewHeight: CGFloat = 2
     }
 
     // Container view of the segmented control
     private lazy var segmentedControlContainerView: UIView = {
         let containerView = UIView()
-        containerView.backgroundColor = .clear
+        containerView.backgroundColor = .white
         containerView.translatesAutoresizingMaskIntoConstraints = false
         return containerView
     }()
@@ -178,8 +179,8 @@ class Prospects: UIViewController,UITableViewDelegate,UITableViewDataSource
         let segmentedControl = UISegmentedControl()
         
         // Remove background and divider colors
-        segmentedControl.backgroundColor =  UIColor(red:60.0/255.0, green:46.0/255.0, blue:125.0/255.0, alpha: 1.0)
-        segmentedControl.tintColor = .clear
+        segmentedControl.backgroundColor =  UIColor.white
+        segmentedControl.tintColor = .white
         
         // Append segments
         segmentedControl.insertSegment(withTitle: "All", at: 0, animated: true)
@@ -191,12 +192,12 @@ class Prospects: UIViewController,UITableViewDelegate,UITableViewDataSource
         
         // Change text color and the font of the NOT selected (normal) segment
         segmentedControl.setTitleTextAttributes([
-            NSAttributedString.Key.foregroundColor: UIColor.white,
+            NSAttributedString.Key.foregroundColor: UIColor.gray,
             NSAttributedString.Key.font: UIFont.systemFont(ofSize: 16, weight: .regular)], for: .normal)
         
         // Change text color and the font of the selected segment
         segmentedControl.setTitleTextAttributes([
-            NSAttributedString.Key.foregroundColor: UIColor.white,
+            NSAttributedString.Key.foregroundColor: UIColor.black,
             NSAttributedString.Key.font: UIFont.systemFont(ofSize: 16, weight: .bold)], for: .selected)
         
         // Set up event handler to get notified when the selected segment changes
@@ -279,28 +280,36 @@ class Prospects: UIViewController,UITableViewDelegate,UITableViewDataSource
                     
                     self.student_name.removeAllObjects()
                     self.student_status.removeAllObjects()
-                    
+                    self.student_pic.removeAllObjects()
+
                     if (status == "success")
                     {
-                 //       self.mainView.isHidden = false
-                        var studentList = JSON?["studentList"] as? [Any]
+                        self.mainView.isHidden = false
+                        self.tableView.isHidden = false
+                        let studentList = JSON?["studentList"] as? [Any]
                         
                         for i in 0..<(studentList?.count ?? 0)
                         {
-                            var dict = studentList?[i] as? [AnyHashable : Any]
+                            let dict = studentList?[i] as? [AnyHashable : Any]
                             let studentName = dict?["name"] as? String
                             let Status = dict?["status"] as? String
                             let id = dict?["id"] as? String
+                            let student_pic = dict?["student_pic"] as? String
 
                             self.student_name.add(studentName!)
                             self.student_status.add(Status!)
                             self.studentID.add(id!)
+                            self.student_pic.add(student_pic!)
+
                         }
                         
                             self.tableView.reloadData()
                     }
                     else
                     {
+                        self.tableView.isHidden = true
+                        self.mainView.isHidden = true
+
                         let alertController = UIAlertController(title: "M3", message: msg, preferredStyle: .alert)
                         let action1 = UIAlertAction(title: "Ok", style: .default) { (action:UIAlertAction) in
                             print("You've pressed default");
@@ -343,22 +352,28 @@ class Prospects: UIViewController,UITableViewDelegate,UITableViewDataSource
                     
                     self.student_name.removeAllObjects()
                     self.student_status.removeAllObjects()
-                    
+                    self.student_pic.removeAllObjects()
+
                     if (status == "success")
                     {
-                      //  self.mainView.isHidden = false
-                        var studentList = JSON?["studentList"] as? [Any]
+                        self.mainView.isHidden = false
+                        self.tableView.isHidden = false
+                        let studentList = JSON?["studentList"] as? [Any]
                        
                         for i in 0..<(studentList?.count ?? 0)
                         {
-                            var dict = studentList?[i] as? [AnyHashable : Any]
+                            let dict = studentList?[i] as? [AnyHashable : Any]
                             let studentName = dict?["name"] as? String
                             let Status = dict?["status"] as? String
                             let id = dict?["id"] as? String
+                            let student_pic = dict?["student_pic"] as? String
+
 
                             self.student_name.add(studentName!)
                             self.student_status.add(Status!)
                             self.studentID.add(id!)
+                            self.student_pic.add(student_pic!)
+
 
                         }
                         
@@ -366,6 +381,9 @@ class Prospects: UIViewController,UITableViewDelegate,UITableViewDataSource
                     }
                     else
                     {
+                        self.tableView.isHidden = true
+                        self.mainView.isHidden = true
+
                         let alertController = UIAlertController(title: "M3", message: msg, preferredStyle: .alert)
                         let action1 = UIAlertAction(title: "Ok", style: .default) { (action:UIAlertAction) in
                             print("You've pressed default");
@@ -406,27 +424,35 @@ class Prospects: UIViewController,UITableViewDelegate,UITableViewDataSource
                     let status = JSON?["status"] as? String
                     self.student_name.removeAllObjects()
                     self.student_status.removeAllObjects()
+                    self.student_pic.removeAllObjects()
+
                     if (status == "success")
                     {
-                      //  self.mainView.isHidden = false
-                        var studentList = JSON?["studentList"] as? [Any]
+                        self.mainView.isHidden = false
+                        self.tableView.isHidden = false
+                        let studentList = JSON?["studentList"] as? [Any]
                         for i in 0..<(studentList?.count ?? 0)
                         {
-                            var dict = studentList?[i] as? [AnyHashable : Any]
+                            let dict = studentList?[i] as? [AnyHashable : Any]
                             let studentName = dict?["name"] as? String
                             let Status = dict?["status"] as? String
                             let id = dict?["id"] as? String
+                            let student_pic = dict?["student_pic"] as? String
 
                             self.student_name.add(studentName!)
                             self.student_status.add(Status!)
                             self.studentID.add(id!)
+                            self.student_pic.add(student_pic!)
+
 
                         }
-                        
                             self.tableView.reloadData()
                     }
                     else
                     {
+                        self.tableView.isHidden = true
+                        self.mainView.isHidden = true
+
                         let alertController = UIAlertController(title: "M3", message: msg, preferredStyle: .alert)
                         let action1 = UIAlertAction(title: "Ok", style: .default) { (action:UIAlertAction) in
                             print("You've pressed default");
@@ -452,35 +478,38 @@ class Prospects: UIViewController,UITableViewDelegate,UITableViewDataSource
         let cell = self.tableView.dequeueReusableCell(withIdentifier: "cell") as! ProspectsTableViewCell
         
         cell.nameLabel.text = (student_name[indexPath.row] as! String)
-        
         cell.statusLabel.text = (student_status[indexPath.row] as! String)
 
         return cell
     }
+    
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath)
     {
         if GlobalVariables.user_type_name != "TNSRLM"
         {
             GlobalVariables.studentid = (studentID[indexPath.row] as! String)
             UserDefaults.standard.set("fromstudentView", forKey: "View") //setObject
+            self.student_Pic = student_pic[indexPath.row] as! String
             self.performSegue(withIdentifier: "studentDetail", sender: self)
         }
-       
     }
     
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat
     {
-        return 40
+        return 44
     }
     
-    /*
     // MARK: - Navigation
 
     // In a storyboard-based application, you will often want to do a little preparation before navigation
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         // Get the new view controller using segue.destination.
         // Pass the selected object to the new view controller.
+        if (segue.identifier == "studentDetail") {
+            let vc = segue.destination as! CandidateForm
+            vc.studentPic = self.student_Pic
+        }
     }
-    */
+    
 
 }

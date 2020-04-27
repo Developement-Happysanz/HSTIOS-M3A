@@ -8,4 +8,8 @@ platform :ios, '10.3'
    pod 'Alamofire', '~> 4.7'
    pod 'SDWebImage', '~> 4.0'
    pod 'MBProgressHUD', '~> 1.1.0'
+   pod ‘ReachabilitySwift’, ‘~> 3’
+   pod 'Charts'
+   pod 'SwiftyJSON', '~> 4.0'
+
  end

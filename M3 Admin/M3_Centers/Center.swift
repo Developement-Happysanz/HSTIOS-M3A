@@ -28,7 +28,8 @@ class Center: UIViewController,UITableViewDelegate,UITableViewDataSource
 
         // Do any additional setup after loading the view.
         
-      
+//      self.tableView.tableFooterView = UIView(frame: .zero)
+//      self.tableView.backgroundColor = UIColor.clear
         
         if GlobalVariables.user_type_name == "TNSRLM"
         {
@@ -42,12 +43,12 @@ class Center: UIViewController,UITableViewDelegate,UITableViewDataSource
             webRequest ()
         }
         
-        let str = UserDefaults.standard.string(forKey: "fromDashboard")
-        
-        if str != "YES"
-        {
-            setupSideMenu()
-        }
+//        let str = UserDefaults.standard.string(forKey: "fromDashboard")
+//
+//        if str != "YES"
+//        {
+//            setupSideMenu()
+//        }
         
     }
     fileprivate func setupSideMenu()
@@ -89,7 +90,7 @@ class Center: UIViewController,UITableViewDelegate,UITableViewDataSource
     {
         if GlobalVariables.user_type_name == "TNSRLM"
         {
-            self.performSegue(withIdentifier: "tnsrlm_piaList", sender: self)
+            self.performSegue(withIdentifier: "to_Dashboard", sender: self)
             
         }
         else
@@ -174,10 +175,10 @@ class Center: UIViewController,UITableViewDelegate,UITableViewDataSource
                     let status = JSON?["status"] as? String
                     if (status == "success")
                     {
-                        var centerList = JSON?["centerList"] as? [Any]
+                        let centerList = JSON?["centerList"] as? [Any]
                         for i in 0..<(centerList?.count ?? 0)
                         {
-                            var dict = centerList?[i] as? [AnyHashable : Any]
+                            let dict = centerList?[i] as? [AnyHashable : Any]
                             let center_name = dict?["center_name"] as? String
                             let center_address = dict?["center_address"] as? String
                             let center_id = dict?["id"] as? String
@@ -224,10 +225,10 @@ class Center: UIViewController,UITableViewDelegate,UITableViewDataSource
                     let status = JSON?["status"] as? String
                     if (status == "success")
                     {
-                        var centerList = JSON?["centerList"] as? [Any]
+                        let centerList = JSON?["centerList"] as? [Any]
                         for i in 0..<(centerList?.count ?? 0)
                         {
-                            var dict = centerList?[i] as? [AnyHashable : Any]
+                            let dict = centerList?[i] as? [AnyHashable : Any]
                             let center_name = dict?["center_name"] as? String
                             let center_address = dict?["center_address"] as? String
                             let center_id = dict?["id"] as? String

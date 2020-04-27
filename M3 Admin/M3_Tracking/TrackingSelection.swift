@@ -25,28 +25,24 @@ class TrackingSelection: UIViewController
         UserDefaults.standard.set("distance", forKey: "tracking_View")
         self.performSegue(withIdentifier: "trackingPage", sender: self)
     }
+    @IBAction func reportAction(_ sender: Any)
+    {
+        self.performSegue(withIdentifier: "report", sender: self)
+    }
+    
     override func viewDidLoad()
     {
         super.viewDidLoad()
-
         // Do any additional setup after loading the view.
-        
         liveTrackingOutlet.layer.cornerRadius = 4
-        
         distanceTrackingOutlet.layer.cornerRadius = 4
-        
         navigationLeftButton ()
-        
         let str = UserDefaults.standard.string(forKey: "fromDashboard")
-        
         if str != "YES"
         {
             setupSideMenu()
         }
-
-        
         self.title = "Tracking"
-
     }
     
     fileprivate func setupSideMenu()

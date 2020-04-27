@@ -18,6 +18,7 @@ class SidemenunTnsrlm: UITableViewController {
 
         // Uncomment the following line to display an Edit button in the navigation bar for this view controller.
         // self.navigationItem.rightBarButtonItem = self.editButtonItem
+        self.tableView.backgroundColor = UIColor.white
     }
 
     // MARK: - Table view data source
@@ -39,6 +40,10 @@ class SidemenunTnsrlm: UITableViewController {
         {
             return 191
         }
+        else if (indexPath.row == 6)
+        {
+            return 180
+        }
         else
         {
             return 60
@@ -59,10 +64,39 @@ class SidemenunTnsrlm: UITableViewController {
         else if indexPath.row == 4
         {
             UserDefaults.standard.set("YES", forKey: "Tnsrlmstaff")
+            UserDefaults.standard.set("staff", forKey: "tnsrlmPia")
             self.performSegue(withIdentifier: "TNSRLM_Sidemenu_User", sender: self)
         }
-        else if indexPath.row == 6
+        else if indexPath.row == 5
         {
+            UserDefaults.standard.set("YES", forKey: "Tnsrlmstaff")
+            self.performSegue(withIdentifier: "to_Scheme", sender: self)
+        }
+    }
+    
+    @IBAction func aboutUs(_ sender: Any)
+    {
+        self.performSegue(withIdentifier: "aboutUs", sender: self)
+    }
+    
+    @IBAction func changePaswrd(_ sender: Any)
+    {
+        self.performSegue(withIdentifier: "changePassword", sender: self)
+    }
+    
+    @IBAction func profileAction(_ sender: Any)
+    {
+        self.performSegue(withIdentifier: "to_Profile", sender: self)
+    }
+    
+    @IBAction func logOut(_ sender: Any)
+    {
+            
+        let alertController = UIAlertController(title: "M3", message: "Do you really want to logout?", preferredStyle: UIAlertController.Style.alert)
+                      
+        let okAction = UIAlertAction(title: "YES", style: UIAlertAction.Style.default) {
+                      UIAlertAction in
+                  
             GlobalVariables.deviceToken = ""
             GlobalVariables.user_id = ""
             GlobalVariables.name = ""
@@ -70,18 +104,17 @@ class SidemenunTnsrlm: UITableViewController {
             GlobalVariables.user_pic = ""
             GlobalVariables.user_type = ""
             GlobalVariables.user_type_name = ""
-            
+                                    
             /* Dashboard values */
-//            GlobalVariables.center_count = ""
-//            GlobalVariables.mobilizer_count = ""
-//            GlobalVariables.student_count = ""
-//            GlobalVariables.task_count = ""
-//            
-//            /* Project Period */
-//            GlobalVariables.period_from = ""
-//            GlobalVariables.period_to = ""
-            
-            
+            // GlobalVariables.center_count = ""
+            // GlobalVariables.mobilizer_count = ""
+            // GlobalVariables.student_count = ""
+            // GlobalVariables.task_count = ""
+            //
+            /* Project Period */
+            // GlobalVariables.period_from = ""
+            // GlobalVariables.period_to = ""
+                                    
             /* center */
             GlobalVariables.center_id = ""
             
@@ -150,7 +183,15 @@ class SidemenunTnsrlm: UITableViewController {
             UserDefaults.standard.removeObject(forKey: "pia_Creation")
             
            self.performSegue(withIdentifier: "tnsrlmLogout", sender: self)
-        }
+          }
+          let cancelAction = UIAlertAction(title: "NO", style: UIAlertAction.Style.default) {
+                            UIAlertAction in
+          }
+          
+          alertController.addAction(okAction)
+          alertController.addAction(cancelAction)
+          self.present(alertController, animated: true, completion: nil)
+        
     }
-
+    
 }

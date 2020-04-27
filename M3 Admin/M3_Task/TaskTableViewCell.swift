@@ -11,16 +11,12 @@ import UIKit
 class TaskTableViewCell: UITableViewCell {
 
     @IBOutlet var subView: UIView!
-    
     @IBOutlet var tasktitle: UILabel!
-    
-    @IBOutlet var taskDetails: UITextView!
-    
+    @IBOutlet weak var taskDetails: UILabel!
     @IBOutlet var deleteOutlet: UIButton!
-    
     @IBOutlet var dateLabel: UILabel!
-    
     @IBOutlet var assignedLabel: UILabel!
+    @IBOutlet weak var statusLabel: UILabel!
     
     override func awakeFromNib() {
         super.awakeFromNib()

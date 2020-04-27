@@ -16,25 +16,16 @@ class Tracking: UIViewController, UITextFieldDelegate,UIPickerViewDelegate,UIPic
 {
     
     var datePicker = UIDatePicker()
-
     var picker = UIPickerView()
-
     var name = [String]()
-    
     var userid = [String]()
-    
     var user_master_id = [String]()
     
     @IBOutlet var datetext: UITextField!
-    
     @IBOutlet var mobiliserText: UITextField!
-    
     @IBOutlet var trackOutlet: UIButton!
-    
     @IBOutlet var dateImg: UIImageView!
-    
     @IBOutlet var dateTitle: UILabel!
-    
     @IBAction func trackButton(_ sender: Any)
     {
         if self.datetext.text == ""
@@ -68,27 +59,17 @@ class Tracking: UIViewController, UITextFieldDelegate,UIPickerViewDelegate,UIPic
         super.viewDidLoad()
 
         // Do any additional setup after loading the view.
-        
          self.title = "Track Mobiliser"
-        
          NavigationBarTitleColor.navbar_TitleColor
-
          datetext.layer.borderWidth = 1.0
          datetext.layer.cornerRadius = 4
-        
          mobiliserText.layer.borderWidth = 1.0
          mobiliserText.layer.cornerRadius = 4
-        
          trackOutlet.layer.cornerRadius = 4
-        
          webRequest ()
-        
          datetext.delegate = self
-        
          mobiliserText.delegate = self
-        
         let str = UserDefaults.standard.string(forKey: "tracking_View")
-        
         if str == "live"
         {
             let date = Date()
@@ -106,9 +87,7 @@ class Tracking: UIViewController, UITextFieldDelegate,UIPickerViewDelegate,UIPic
             self.dateImg.isHidden = false
             self.dateTitle.text = "Pick Up The Date"
         }
-        
         navigationLeftButton ()
-
     }
     func navigationLeftButton ()
     {
@@ -152,6 +131,7 @@ class Tracking: UIViewController, UITextFieldDelegate,UIPickerViewDelegate,UIPic
         self.datePicker = UIDatePicker(frame:CGRect(x: 0, y: 0, width: self.view.frame.size.width, height: 216))
         self.datePicker.backgroundColor = UIColor.white
         self.datePicker.datePickerMode = .date
+        self.datePicker.setValue(UIColor.black, forKey: "textColor")
         datetext.inputView = self.datePicker
         
         //ToolBar
@@ -190,7 +170,7 @@ class Tracking: UIViewController, UITextFieldDelegate,UIPickerViewDelegate,UIPic
         let functionName = "apimain/pia_mob_list"
         let baseUrl = Baseurl.baseUrl + functionName
         let url = URL(string: baseUrl)!
-        let parameters: Parameters = ["pia_id": GlobalVariables.user_id!   ]
+        let parameters: Parameters = ["pia_id": GlobalVariables.user_id!]
         Alamofire.request(url, method: .post, parameters: parameters,encoding: JSONEncoding.default, headers: nil).responseJSON
             {
                 response in
@@ -203,10 +183,10 @@ class Tracking: UIViewController, UITextFieldDelegate,UIPickerViewDelegate,UIPic
                     let status = JSON?["status"] as? String
                     if (status == "success")
                     {
-                        var userList = JSON?["userList"] as? [Any]
+                        let userList = JSON?["userList"] as? [Any]
                         for i in 0..<(userList?.count ?? 0)
                         {
-                            var dict = userList?[i] as? [AnyHashable : Any]
+                            let dict = userList?[i] as? [AnyHashable : Any]
                             let _name = dict?["name"] as? String
                             let user_id = dict?["user_id"] as? String
                             let usermasterid = dict?["user_master_id"] as? String
@@ -239,7 +219,8 @@ class Tracking: UIViewController, UITextFieldDelegate,UIPickerViewDelegate,UIPic
         
         picker = UIPickerView(frame: CGRect(x: 0, y: 0, width: self.view.frame.size.width, height: 216))
         picker.backgroundColor = .white
-        
+        self.picker.setValue(UIColor.black, forKey: "textColor")
+
         picker.showsSelectionIndicator = true
         picker.delegate = self
         picker.dataSource = self
@@ -293,6 +274,8 @@ class Tracking: UIViewController, UITextFieldDelegate,UIPickerViewDelegate,UIPic
     {
         mobiliserText.resignFirstResponder()
     }
+    
+    
     /*
     // MARK: - Navigation
 

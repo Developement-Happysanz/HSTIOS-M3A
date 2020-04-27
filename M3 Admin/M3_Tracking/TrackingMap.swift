@@ -199,10 +199,10 @@ class TrackingMap: UIViewController,CLLocationManagerDelegate,MKMapViewDelegate
                     let status = JSON?["status"] as? String
                     if (status == "success")
                     {
-                        var trackingDetails = JSON?["trackingDetails"] as? [Any]
+                        let trackingDetails = JSON?["trackingDetails"] as? [Any]
                         for i in 0..<(trackingDetails?.count ?? 0)
                         {
-                            var dict = trackingDetails?[i] as? [AnyHashable : Any]
+                            let dict = trackingDetails?[i] as? [AnyHashable : Any]
                             self.lat = dict?["Latitude"] as! String
                             self.long = dict?["Longitude"] as! String
                         }
@@ -245,24 +245,24 @@ class TrackingMap: UIViewController,CLLocationManagerDelegate,MKMapViewDelegate
                     let status = JSON?["status"] as? String
                     if (status == "success")
                     {
-                        var trackingDetails = JSON?["trackingDetails"] as? [Any]
+                        let trackingDetails = JSON?["trackingDetails"] as? [Any]
                         
-                        var Distance = JSON?["Distance"] as? [Any]
+                        let Distance = JSON?["Distance"] as? [Any]
                         
                         for i in 0..<(Distance?.count ?? 0)
                         {
-                            var dict = Distance?[i] as? [AnyHashable : Any]
+                            let dict = Distance?[i] as? [AnyHashable : Any]
                          //   let distance = dict?["distance"] as? String
                             let km = dict?["km"] as? String
                             
-                            self.distanceLabel.text  = String(format: "%@ %@","Distance Travelled : ", km!.prefix(5) as CVarArg)
+                            self.distanceLabel.text  = String(format: "%@ %@ %@","Distance Travelled : ", km!.prefix(5) as CVarArg,"Km")
                             
                             print(self.distanceLabel.text as Any)
                             
                         }
                         for i in 0..<(trackingDetails?.count ?? 0)
                         {
-                            var dict = trackingDetails?[i] as? [AnyHashable : Any]
+                            let dict = trackingDetails?[i] as? [AnyHashable : Any]
                             
                             
                             let _Latitude = dict?["Latitude"] as? String

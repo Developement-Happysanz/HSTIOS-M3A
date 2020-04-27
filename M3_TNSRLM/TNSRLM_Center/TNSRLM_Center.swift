@@ -89,10 +89,10 @@ class TNSRLM_Center: UIViewController
                     let status = JSON?["status"] as? String
                     if (status == "success")
                     {
-                        var centerList = JSON?["cenerDetails"] as? [Any]
+                        let centerList = JSON?["cenerDetails"] as? [Any]
                         for i in 0..<(centerList?.count ?? 0)
                         {
-                            var dict = centerList?[i] as? [AnyHashable : Any]
+                            let dict = centerList?[i] as? [AnyHashable : Any]
                             self.centerName.text = dict?["center_name"] as? String
                             let centerdetails   = dict?["center_info"] as? String
                             self.centerDetail.text = centerdetails

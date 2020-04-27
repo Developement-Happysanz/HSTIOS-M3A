@@ -10,8 +10,9 @@ import UIKit
 import SideMenu
 import Alamofire
 import WebKit
+import MBProgressHUD
 
-class Plan: UIViewController,UITableViewDelegate,UITableViewDataSource
+class Plan: UIViewController,UITableViewDelegate,UITableViewDataSource, UIDocumentInteractionControllerDelegate
 {
     var doc_name : NSMutableArray = NSMutableArray()
     
@@ -21,7 +22,7 @@ class Plan: UIViewController,UITableViewDelegate,UITableViewDataSource
 
     var doc_url : NSMutableArray = NSMutableArray()
 
-    /// Creating UIDocumentInteractionController instance.
+    // Creating UIDocumentInteractionController instance.
     let documentInteractionController = UIDocumentInteractionController()
 
     
@@ -29,12 +30,11 @@ class Plan: UIViewController,UITableViewDelegate,UITableViewDataSource
         super.viewDidLoad()
 
         // Do any additional setup after loading the view.
-        
         self.title = "Mobilization Plan"
-        
         NavigationBarTitleColor.navbar_TitleColor
-        
         documentInteractionController.delegate = self
+        self.tableView.tableFooterView = UIView(frame: .zero)
+        self.tableView.backgroundColor = UIColor.clear
         
     }
     
@@ -43,16 +43,13 @@ class Plan: UIViewController,UITableViewDelegate,UITableViewDataSource
         if GlobalVariables.user_type_name == "TNSRLM"
         {
             navigationLeftButton ()
-            
             webRequestTnsrlm ()
+
         }
         else
         {
-            
             navigationRightButton ()
-            
-          //  setupSideMenu()
-            
+//          setupSideMenu()
             webRequest ()
         }
     }
@@ -116,12 +113,12 @@ class Plan: UIViewController,UITableViewDelegate,UITableViewDataSource
         SideMenuManager.default.menuAddScreenEdgePanGesturesToPresent(toView: self.navigationController!.view)
     }
     
-    func webRequest ()
+    func webRequestTnsrlm ()
     {
         let functionName = "apipia/mobilization_plan_list"
         let baseUrl = Baseurl.baseUrl + functionName
         let url = URL(string: baseUrl)!
-        let parameters: Parameters = ["user_id": GlobalVariables.user_id!]
+        let parameters: Parameters = ["user_id": GlobalVariables.pia_id!]
         Alamofire.request(url, method: .post, parameters: parameters,encoding: JSONEncoding.default, headers: nil).responseJSON
             {
                 response in
@@ -134,14 +131,14 @@ class Plan: UIViewController,UITableViewDelegate,UITableViewDataSource
                     let status = JSON?["status"] as? String
                     if (status == "success")
                     {
-                        var planDetails = JSON?["planDetails"] as? [Any]
+                        let planDetails = JSON?["planDetails"] as? [Any]
                         self.doc_name.removeAllObjects()
                         self.doc_month_year.removeAllObjects()
                         self.plan_id.removeAllObjects()
                         self.doc_url.removeAllObjects()
                         for i in 0..<(planDetails?.count ?? 0)
                         {
-                            var dict = planDetails?[i] as? [AnyHashable : Any]
+                            let dict = planDetails?[i] as? [AnyHashable : Any]
                             let docname = dict?["doc_name"] as? String
                             let docmonth_year = dict?["doc_month_year"] as? String
                             let planid = dict?["plan_id"] as? String
@@ -173,7 +170,7 @@ class Plan: UIViewController,UITableViewDelegate,UITableViewDataSource
         }
     }
     
-    func webRequestTnsrlm ()
+    func webRequest ()
     {
         let functionName = "apimain/pia_plan_list"
         let baseUrl = Baseurl.baseUrl + functionName
@@ -191,18 +188,19 @@ class Plan: UIViewController,UITableViewDelegate,UITableViewDataSource
                     let status = JSON?["status"] as? String
                     if (status == "success")
                     {
-                        var planDetails = JSON?["planDetails"] as? [Any]
+                        let planDetails = JSON?["planList"] as? [Any]
                         self.doc_name.removeAllObjects()
                         self.doc_month_year.removeAllObjects()
                         self.plan_id.removeAllObjects()
                         self.doc_url.removeAllObjects()
+                        
                         for i in 0..<(planDetails?.count ?? 0)
                         {
-                            var dict = planDetails?[i] as? [AnyHashable : Any]
-                            let docname = dict?["doc_name"] as? String
-                            let docmonth_year = dict?["doc_month_year"] as? String
-                            let planid = dict?["plan_id"] as? String
-                            let docurl = dict?["doc_url"] as? String
+                            let dict = planDetails?[i] as? [AnyHashable : Any]
+                            let docname = dict?["doc_name "] as? String
+                            let docmonth_year = dict?["doc_month_year "] as? String
+                            let planid = dict?["pia_id"] as? String
+                            let docurl = dict?["doc_file"] as? String
 
                             self.doc_name.add(docname!)
                             self.doc_month_year.add(docmonth_year!)
@@ -240,64 +238,84 @@ class Plan: UIViewController,UITableViewDelegate,UITableViewDataSource
         
         cell.name.text = (doc_name[indexPath.row] as! String)
         cell.role.text = (doc_month_year[indexPath.row] as! String)
+        cell.downloadOutlet.tag = indexPath.row
+        cell.downloadOutlet.addTarget(self, action: #selector(buttonSelected), for: .touchUpInside)
         
+        cell.subView.layer.cornerRadius = 3.0
+
         return cell
+    }
+    
+    func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat
+      {
+          return 83
+      }
+    
+    @objc func buttonSelected(sender: UIButton){
+        print(sender.tag)
+        MBProgressHUD.showAdded(to: self.view, animated: true)
+        let buttonPosition = sender.convert(CGPoint.zero, to: self.tableView)
+        let indexPath = self.tableView.indexPathForRow(at:buttonPosition)
+        let rowNumber : Int = indexPath!.row
+//        let _url = doc_url[rowNumber]
+//        storeAndShare(withURLString: _url as! String)
     }
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath)
     {
-        let _url = (doc_url[indexPath.row] as! String)
-        
-        storeAndShare(withURLString: _url)
+      // MBProgressHUD.showAdded(to: self.view, animated: true)
+      
     }
 }
-extension Plan {
-    
-    func share(url: URL) {
-        documentInteractionController.url = url
-        documentInteractionController.uti = url.typeIdentifier ?? "public.data, public.content"
-        documentInteractionController.name = url.localizedName ?? url.lastPathComponent
-        documentInteractionController.presentPreview(animated: true)
-    }
-    
-    /// This function will store your document to some temporary URL and then provide sharing, copying, printing, saving options to the user
-    func storeAndShare(withURLString: String) {
-        guard let url = URL(string: withURLString) else { return }
-        /// START YOUR ACTIVITY INDICATOR HERE
-        URLSession.shared.dataTask(with: url) { data, response, error in
-            guard let data = data, error == nil else { return }
-            let tmpURL = FileManager.default.temporaryDirectory
-                .appendingPathComponent(response?.suggestedFilename ?? "fileName.png")
-            do {
-                try data.write(to: tmpURL)
-            } catch {
-                print(error)
-            }
-            DispatchQueue.main.async {
-                /// STOP YOUR ACTIVITY INDICATOR HERE
-                self.share(url: tmpURL)
-            }
-            }.resume()
-    }
-}
-
-extension Plan: UIDocumentInteractionControllerDelegate
-{
-    /// If presenting atop a navigation stack, provide the navigation controller in order to animate in a manner consistent with the rest of the platform
-    func documentInteractionControllerViewControllerForPreview(_ controller: UIDocumentInteractionController) -> UIViewController {
-        guard let navVC = self.navigationController else {
-            return self
-        }
-        return navVC
-    }
-}
-
-extension URL
-{
-    var typeIdentifier: String? {
-        return (try? resourceValues(forKeys: [.typeIdentifierKey]))?.typeIdentifier
-    }
-    var localizedName: String? {
-        return (try? resourceValues(forKeys: [.localizedNameKey]))?.localizedName
-    }
-}
+//extension Plan {
+//
+//    func share(url: URL) {
+//        documentInteractionController.url = url
+//        documentInteractionController.uti = url.typeIdentifier ?? "public.data, public.content"
+//        documentInteractionController.name = url.localizedName ?? url.lastPathComponent
+//        documentInteractionController.presentPreview(animated: true)
+//    }
+//
+//    /// This function will store your document to some temporary URL and then provide sharing, copying, printing, saving options to the user
+//    func storeAndShare(withURLString: String)
+//    {
+//        guard let url = URL(string: withURLString) else { return }
+//        /// START YOUR ACTIVITY INDICATOR HERE
+//        URLSession.shared.dataTask(with: url) { data, response, error in
+//            guard let data = data, error == nil else { return }
+//            let tmpURL = FileManager.default.temporaryDirectory
+//                .appendingPathComponent(response?.suggestedFilename ?? "fileName.png")
+//            do {
+//                try data.write(to: tmpURL)
+//            } catch {
+//                print(error)
+//            }
+//            DispatchQueue.main.async {
+//                /// STOP YOUR ACTIVITY INDICATOR HERE
+//                MBProgressHUD.hide(for: self.view, animated: true)
+//                self.share(url: tmpURL)
+//            }
+//            }.resume()
+//    }
+//}
+//
+//extension Plan: UIDocumentInteractionControllerDelegate
+//{
+//    /// If presenting atop a navigation stack, provide the navigation controller in order to animate in a manner consistent with the rest of the platform
+//    func documentInteractionControllerViewControllerForPreview(_ controller: UIDocumentInteractionController) -> UIViewController {
+//        guard let navVC = self.navigationController else {
+//            return self
+//        }
+//        return navVC
+//    }
+//}
+//
+//extension URL
+//{
+//    var typeIdentifier: String? {
+//        return (try? resourceValues(forKeys: [.typeIdentifierKey]))?.typeIdentifier
+//    }
+//    var localizedName: String? {
+//        return (try? resourceValues(forKeys: [.localizedNameKey]))?.localizedName
+//    }
+//}

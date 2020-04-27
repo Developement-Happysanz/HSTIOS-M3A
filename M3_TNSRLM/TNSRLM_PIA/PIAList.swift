@@ -8,40 +8,39 @@
 
 import UIKit
 import Alamofire
+import MBProgressHUD
 
 class PIAList: UIViewController,UITableViewDelegate,UITableViewDataSource
 {
     var name : NSMutableArray = NSMutableArray()
-    
     var user_type_name : NSMutableArray = NSMutableArray()
-    
     var user_master_id : NSMutableArray = NSMutableArray()
+    var user_idArr : NSMutableArray = NSMutableArray()
    
     @IBOutlet var tableView: UITableView!
-    
-    override func viewDidLoad() {
+    override func viewDidLoad()
+    {
         super.viewDidLoad()
-
         // Do any additional setup after loading the view.
         NavigationBarTitleColor.navbar_TitleColor
-
         navigationLeftButton ()
-        
         let str = UserDefaults.standard.string(forKey: "tnsrlmPia")
-        
         if str == "YES"
         {
-             navigationRightButton ()
+           navigationRightButton ()
         }
-    
-        self.title = "PIA LIST"
-        
-        webRequest ()
-        
+        self.title = "Training Partner"
+//      webRequest ()
+        self.tableView.tableFooterView = UIView(frame: .zero)
+        self.tableView.backgroundColor = UIColor.clear
     }
+    
+    override func viewWillAppear(_ animated: Bool) {
+        webRequest ()
+    }
+    
     func navigationLeftButton ()
     {
-    
         let navigationLeftButton = UIButton(type: .custom)
         navigationLeftButton.setImage(UIImage(named: "back-01"), for: .normal)
         navigationLeftButton.frame = CGRect(x: 0, y: 0, width: 30, height: 30)
@@ -77,6 +76,7 @@ class PIAList: UIViewController,UITableViewDelegate,UITableViewDataSource
         let baseUrl = Baseurl.baseUrl + functionName
         let url = URL(string: baseUrl)!
         let parameters: Parameters = ["user_id": GlobalVariables.user_id!]
+        MBProgressHUD.showAdded(to: self.view, animated: true)
         Alamofire.request(url, method: .post, parameters: parameters,encoding: JSONEncoding.default, headers: nil).responseJSON
             {
                 response in
@@ -84,29 +84,30 @@ class PIAList: UIViewController,UITableViewDelegate,UITableViewDataSource
                 {
                 case .success:
                     print(response)
+                    MBProgressHUD.hide(for: self.view, animated: true)
                     let JSON = response.result.value as? [String: Any]
                     let msg = JSON?["msg"] as? String
                     let status = JSON?["status"] as? String
                     if (status == "success")
                     {
-                        var studentList = JSON?["userList"] as? [Any]
+                        let studentList = JSON?["userList"] as? [Any]
                         self.name.removeAllObjects()
                         self.user_type_name.removeAllObjects()
                         self.user_master_id.removeAllObjects()
                         for i in 0..<(studentList?.count ?? 0)
                         {
-                            var dict = studentList?[i] as? [AnyHashable : Any]
+                            let dict = studentList?[i] as? [AnyHashable : Any]
                             let name = dict?["name"] as? String
                             let usertypename = dict?["user_type_name"] as? String
-                            let usermaster_id = dict?["user_id"] as? String
+                            let usermaster_id = dict?["user_master_id"] as? String
+                            let user_id = dict?["user_id"] as? String
 
                             self.name.add(name!)
                             self.user_type_name.add(usertypename!)
                             self.user_master_id.add(usermaster_id!)
-
+                            self.user_idArr.add(user_id!)
                         }
-                        
-                        self.tableView.reloadData()
+                            self.tableView.reloadData()
                     }
                     else
                     {
@@ -123,6 +124,7 @@ class PIAList: UIViewController,UITableViewDelegate,UITableViewDataSource
                 }
         }
     }
+    
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int
     {
         return name.count
@@ -131,36 +133,33 @@ class PIAList: UIViewController,UITableViewDelegate,UITableViewDataSource
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell
     {
         let cell = self.tableView.dequeueReusableCell(withIdentifier: "cell") as! PIAListTableViewCell
-        
         cell.serilaNumber.text =  "\(indexPath.row + 1)."
-        
         cell.academyName.text = (name[indexPath.row] as! String)
-        
         cell.editOutlet.tag = indexPath.row;
-        
         cell.editOutlet.addTarget(self, action: #selector(editbuttonClicked), for: .touchUpInside)
-
         return cell
     }
     
     @objc func editbuttonClicked(sender:UIButton)
     {
         let buttonRow = Int(sender.tag)
-        GlobalVariables.pia_id = (user_master_id[buttonRow] as! String)
+        GlobalVariables.user_master_id = (user_master_id[buttonRow] as! String)
+        print(GlobalVariables.user_master_id!)
+        GlobalVariables.pia_id = (user_idArr[buttonRow] as! String)
+        print(GlobalVariables.pia_id!)
         UserDefaults.standard.set("FromList", forKey: "pia_Creation")
         self.performSegue(withIdentifier: "addPIA", sender: self)
-
     }
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath)
     {
-        GlobalVariables.pia_id = (user_master_id[indexPath.row] as! String)
+        GlobalVariables.pia_id = (user_idArr[indexPath.row] as! String)
+        GlobalVariables.user_master_id = (user_master_id[indexPath.row] as! String)
         
         let str = UserDefaults.standard.string(forKey: "tnsrlmPia")
-        
         if str == "YES"
         {
-            // self.performSegue(withIdentifier: "M3_Dashbaord", sender: self)
+             self.performSegue(withIdentifier: "M3_Dashbaord", sender: self)
         }
         else if str == "center"
         {
@@ -179,21 +178,19 @@ class PIAList: UIViewController,UITableViewDelegate,UITableViewDataSource
         {
             self.performSegue(withIdentifier: "M3MobiliserPlan", sender: self)
         }
-        
-       
     }
+    
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat
     {
-        return 56
+        return 44.0
     }
+    
     /*
     // MARK: - Navigation
-
     // In a storyboard-based application, you will often want to do a little preparation before navigation
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         // Get the new view controller using segue.destination.
         // Pass the selected object to the new view controller.
     }
     */
-
 }

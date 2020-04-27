@@ -14,7 +14,12 @@ class Trade: UIViewController,UITableViewDelegate,UITableViewDataSource
 {
     var status = [String]()
     var tradename = [String]()
-    
+    var trade_id = [String]()
+    var selectedTitle = String()
+    var selectedStatus = String()
+    var pageFrom = String()
+    var trade_ID = String()
+
     @IBOutlet weak var tableView: UITableView!
     
     @IBAction func menuButton(_ sender: Any)
@@ -25,6 +30,9 @@ class Trade: UIViewController,UITableViewDelegate,UITableViewDataSource
         super.viewDidLoad()
 
         // Do any additional setup after loading the view.
+        self.tableView.tableFooterView = UIView(frame: .zero)
+        self.tableView.backgroundColor = UIColor.clear
+        
         let str = UserDefaults.standard.string(forKey: "fromDashboard")
         
         if str != "YES"
@@ -110,6 +118,7 @@ class Trade: UIViewController,UITableViewDelegate,UITableViewDataSource
     
     @objc func clickButton()
     {
+        self.pageFrom = "Add"
         self.performSegue(withIdentifier: "addTrade", sender: self)
     }
     
@@ -127,15 +136,23 @@ class Trade: UIViewController,UITableViewDelegate,UITableViewDataSource
         
         if cell.status.text == "Active"
         {
-            cell.status.textColor = UIColor.green
+            cell.status.textColor = UIColor.black
         }
         else
         {
-            cell.status.textColor = UIColor.red
+            cell.status.textColor = UIColor.black
 
         }
 
         return cell
+    }
+    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath)
+    {
+        self.selectedTitle = tradename[indexPath.row]
+        self.selectedStatus = status[indexPath.row]
+        self.pageFrom = "list"
+        self.trade_ID = trade_id[indexPath.row]
+        self.performSegue(withIdentifier: "addTrade", sender: self)
     }
     
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat
@@ -170,16 +187,22 @@ class Trade: UIViewController,UITableViewDelegate,UITableViewDataSource
                     let status = JSON?["status"] as? String
                     if (status == "success")
                     {
-                        var tradeList = JSON?["tradeList"] as? [Any]
+                        let tradeList = JSON?["tradeList"] as? [Any]
+                        self.tradename.removeAll()
+                        self.status.removeAll()
+                        self.trade_id.removeAll()
+                        
                         for i in 0..<(tradeList?.count ?? 0)
                         {
-                            var dict = tradeList?[i] as? [AnyHashable : Any]
+                            let dict = tradeList?[i] as? [AnyHashable : Any]
                             let trade_name = dict?["trade_name"] as? String
                             let Status = dict?["status"] as? String
+                            let _id = dict?["id"] as? String
                             
                             self.tradename.append(trade_name ?? "")
                             self.status.append(Status ?? "")
-                            
+                            self.trade_id.append(_id ?? "")
+
                         }
                         
                             self.tableView.reloadData()
@@ -199,4 +222,16 @@ class Trade: UIViewController,UITableViewDelegate,UITableViewDataSource
                 }
         }
     }
+    
+    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+           // Get the new view controller using segue.destination.
+           // Pass the selected object to the new view controller.
+           if (segue.identifier == "addTrade") {
+               let vc = segue.destination as! AddTrade
+               vc._title = self.selectedTitle
+               vc._status = self.selectedStatus
+               vc.pageFrom = self.pageFrom
+               vc.trade_ID = self.trade_ID
+           }
+       }
 }

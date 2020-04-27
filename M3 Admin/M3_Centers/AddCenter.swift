@@ -90,7 +90,6 @@ class AddCenter: UIViewController,UIImagePickerControllerDelegate, UINavigationC
     {
             let imgData = uploadedImage.jpegData(compressionQuality: 0.75)
 
-        
             if imgData == nil
             {
                 self.performSegue(withIdentifier: "addcenterdetail_center", sender: self)
@@ -236,13 +235,13 @@ class AddCenter: UIViewController,UIImagePickerControllerDelegate, UINavigationC
         self.ImgaecontentView.layer.borderColor = UIColor(red:60/255, green:46/255, blue:125/255, alpha: 1).cgColor
         self.ImgaecontentView.layer.cornerRadius = 5
         
-        self.photoView.layer.borderWidth = 1
-        self.photoView.layer.borderColor = UIColor(red:60/255, green:46/255, blue:125/255, alpha: 1).cgColor
-        self.photoView.layer.cornerRadius = 3
-
-        self.videoView.layer.borderWidth = 1
-        self.videoView.layer.borderColor = UIColor(red:60/255, green:46/255, blue:125/255, alpha: 1).cgColor
-        self.videoView.layer.cornerRadius = 3
+//        self.photoView.layer.borderWidth = 1
+//        self.photoView.layer.borderColor = UIColor(red:60/255, green:46/255, blue:125/255, alpha: 1).cgColor
+//        self.photoView.layer.cornerRadius = 3
+//
+//        self.videoView.layer.borderWidth = 1
+//        self.videoView.layer.borderColor = UIColor(red:60/255, green:46/255, blue:125/255, alpha: 1).cgColor
+//        self.videoView.layer.cornerRadius = 3
         
         self.saveOtlet.layer.cornerRadius = 3
         self.saveOtlet.clipsToBounds = true
